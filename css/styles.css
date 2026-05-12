@@ -1,0 +1,35 @@
+/* General page styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+/* Navbar brand */
+.navbar-brand {
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+/* Hero / main section */
+main {
+  min-height: 80vh;
+}
+
+/* Custom card-style box */
+.hero-box {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Button hover effect */
+.btn-primary {
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(13, 110, 253, 0.25);
+}
