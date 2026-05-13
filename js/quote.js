@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // =========================================
   // STEP 7: FORM SWITCHING
   // =========================================
-
   function hideAllFields() {
     autoFields.classList.add("hidden");
     homeFields.classList.add("hidden");
@@ -35,13 +34,13 @@ document.addEventListener("DOMContentLoaded", function () {
   // =========================================
   // STEP 7: VALIDATION HELPERS
   // =========================================
-
   function clearErrors() {
     const invalidFields = document.querySelectorAll(".is-invalid");
     invalidFields.forEach(function (field) {
       field.classList.remove("is-invalid");
     });
   }
+
   function showError(input) {
     if (input) {
       input.classList.add("is-invalid");
@@ -51,6 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function validateZip(zip) {
     return /^\d{5}$/.test(zip);
   }
+
   function getSelectedInsuranceType() {
     const selected = document.querySelector('input[name="insuranceType"]:checked');
     return selected ? selected.value : "";
@@ -60,11 +60,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const selected = document.querySelector(`input[name="${name}"]:checked`);
     return selected ? selected.value : "";
   }
+
   function validateForm() {
     clearErrors();
 
     const insuranceType = getSelectedInsuranceType();
-    let isValid = true;
 
     if (!insuranceType) {
       alert("Please select an insurance type.");
@@ -76,7 +76,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // -------------------------
     // AUTO VALIDATION
     // -------------------------
-
     if (insuranceType === "auto") {
       const name = document.getElementById("autoName");
       const age = document.getElementById("autoAge");
@@ -91,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
         showError(name);
         isValid = false;
       }
-      if (age.value < 16 || age.value > 100 || age.value === "") {
+      if (age.value === "" || age.value < 16 || age.value > 100) {
         showError(age);
         isValid = false;
       }
@@ -99,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
         showError(zip);
         isValid = false;
       }
-      if (year.value < 1990 || year.value > 2026 || year.value === "") {
+      if (year.value === "" || year.value < 1990 || year.value > 2026) {
         showError(year);
         isValid = false;
       }
@@ -124,8 +123,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // -------------------------
     // HOME VALIDATION
     // -------------------------
-
-
     if (insuranceType === "home") {
       const name = document.getElementById("homeName");
       const age = document.getElementById("homeAge");
@@ -140,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
         showError(name);
         isValid = false;
       }
-      if (age.value < 18 || age.value > 100 || age.value === "") {
+      if (age.value === "" || age.value < 18 || age.value > 100) {
         showError(age);
         isValid = false;
       }
@@ -148,15 +145,15 @@ document.addEventListener("DOMContentLoaded", function () {
         showError(zip);
         isValid = false;
       }
-      if (value.value < 50000 || value.value === "") {
+      if (value.value === "" || value.value < 50000) {
         showError(value);
         isValid = false;
       }
-      if (yearBuilt.value < 1800 || yearBuilt.value > 2026 || yearBuilt.value === "") {
+      if (yearBuilt.value === "" || yearBuilt.value < 1900 || yearBuilt.value > 2026) {
         showError(yearBuilt);
         isValid = false;
       }
-      if (sqft.value < 100 || sqft.value === "") {
+      if (sqft.value === "" || sqft.value < 500 || sqft.value > 10000) {
         showError(sqft);
         isValid = false;
       }
@@ -170,11 +167,9 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-     // -------------------------
+    // -------------------------
     // LIFE VALIDATION
     // -------------------------
-
-
     if (insuranceType === "life") {
       const name = document.getElementById("lifeName");
       const age = document.getElementById("lifeAge");
@@ -189,7 +184,7 @@ document.addEventListener("DOMContentLoaded", function () {
         showError(name);
         isValid = false;
       }
-      if (age.value < 18 || age.value > 85 || age.value === "") {
+      if (age.value === "" || age.value < 18 || age.value > 85) {
         showError(age);
         isValid = false;
       }
@@ -197,9 +192,13 @@ document.addEventListener("DOMContentLoaded", function () {
         showError(zip);
         isValid = false;
       }
-      if (!smoker) {
+      if (gender.value === "") {
+        showError(gender);
         isValid = false;
+      }
+      if (!smoker) {
         alert("Please select smoker Yes or No.");
+        isValid = false;
       }
       if (amount.value === "") {
         showError(amount);
@@ -209,18 +208,19 @@ document.addEventListener("DOMContentLoaded", function () {
         showError(exercise);
         isValid = false;
       }
-      if (!coverage) 
+      if (!coverage) {
         alert("Please select Life coverage level.");
         isValid = false;
       }
     }
+
     return isValid;
   }
+
 
   // =========================================
   // STEP 8: QUOTE CALCULATION
   // =========================================
-
   function formatCurrency(amount) {
     return "$" + amount.toFixed(2);
   }
@@ -238,7 +238,8 @@ document.addEventListener("DOMContentLoaded", function () {
     } else if (age > 65) {
       premium *= 1.3;
     }
-     const vehicleAge = 2026 - year;
+
+    const vehicleAge = 2026 - year;
     if (vehicleAge < 3) {
       premium *= 1.3;
     } else if (vehicleAge <= 10) {
@@ -317,9 +318,30 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // =========================================
+  // STEP 10: BREAKDOWN TABLE ROW HELPER
+  // =========================================
+  function addBreakdownRow(tbody, factor, userValue, impact) {
+    const row = document.createElement("tr");
+
+    const factorCell = document.createElement("td");
+    factorCell.textContent = factor;
+
+    const valueCell = document.createElement("td");
+    valueCell.textContent = userValue;
+
+    const impactCell = document.createElement("td");
+    impactCell.textContent = impact;
+
+    row.appendChild(factorCell);
+    row.appendChild(valueCell);
+    row.appendChild(impactCell);
+
+    tbody.appendChild(row);
+  }
+
+  // =========================================
   // STEP 9: DISPLAY RESULTS
   // =========================================
-
   function showResults(type, premium) {
     const quoteName = document.getElementById("quoteName");
     const quoteType = document.getElementById("quoteType");
@@ -343,10 +365,96 @@ document.addEventListener("DOMContentLoaded", function () {
       type === "home" ? "Home Insurance" :
       "Life Insurance";
 
-      monthlyPremium.textContent = formatCurrency(premium);
+    monthlyPremium.textContent = formatCurrency(premium);
     annualPremium.textContent = formatCurrency(premium * 12);
 
+    // Clear old rows before adding new ones
     breakdownBody.innerHTML = "";
+
+    // Add breakdown rows for Auto
+    if (type === "auto") {
+      addBreakdownRow(
+        breakdownBody,
+        "Age",
+        document.getElementById("autoAge").value,
+        "Young/older driver adjustment"
+      );
+      addBreakdownRow(
+        breakdownBody,
+        "Vehicle Year",
+        document.getElementById("vehicleYear").value,
+        "Vehicle age adjustment"
+      );
+      addBreakdownRow(
+        breakdownBody,
+        "Mileage",
+        document.getElementById("annualMileage").value,
+        "Mileage adjustment"
+      );
+      addBreakdownRow(
+        breakdownBody,
+        "Coverage Level",
+        getSelectedRadioValue("autoCoverage"),
+        "Coverage multiplier"
+      );
+    }
+
+    // Add breakdown rows for Home
+    if (type === "home") {
+      addBreakdownRow(
+        breakdownBody,
+        "Home Value",
+        document.getElementById("homeValue").value,
+        "Base premium based on home value"
+      );
+      addBreakdownRow(
+        breakdownBody,
+        "Year Built",
+        document.getElementById("yearBuilt").value,
+        "Age of home adjustment"
+      );
+      addBreakdownRow(
+        breakdownBody,
+        "Square Footage",
+        document.getElementById("squareFootage").value,
+        "Size adjustment"
+      );
+      addBreakdownRow(
+        breakdownBody,
+        "Coverage Level",
+        getSelectedRadioValue("homeCoverage"),
+        "Coverage multiplier"
+      );
+    }
+
+    // Add breakdown rows for Life
+    if (type === "life") {
+      addBreakdownRow(
+        breakdownBody,
+        "Age",
+        document.getElementById("lifeAge").value,
+        "Age-based risk adjustment"
+      );
+      addBreakdownRow(
+        breakdownBody,
+        "Coverage Amount",
+        document.getElementById("coverageAmount").value,
+        "Policy size adjustment"
+      );
+      addBreakdownRow(
+        breakdownBody,
+        "Smoker",
+        document.querySelector('input[name="smoker"]:checked').value,
+        "Health risk adjustment"
+      );
+      addBreakdownRow(
+        breakdownBody,
+        "Exercise Frequency",
+        document.getElementById("exerciseFrequency").value,
+        "Lifestyle adjustment"
+      );
+    }
+
     resultsSection.classList.remove("hidden");
   }
 
@@ -373,7 +481,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // =========================================
-  // GET ANOTHER QUOTE BUTTON
+  // STEP 11: GET ANOTHER QUOTE BUTTON
   // =========================================
   anotherQuoteBtn.addEventListener("click", function () {
     quoteForm.reset();
@@ -382,11 +490,4 @@ document.addEventListener("DOMContentLoaded", function () {
     resultsSection.classList.add("hidden");
   });
 });
-
-
-
-
-
-
-    });
   
