@@ -39,11 +39,28 @@ document.addEventListener("DOMContentLoaded", function () {
     invalidFields.forEach(function (field) {
       field.classList.remove("is-invalid");
     });
+
+    const customErrors = document.querySelectorAll(".text-danger.small");
+    customErrors.forEach(function (el) {
+      el.textContent = "";
+    });
   }
 
-  function showError(input) {
+  function showError(input, message) {
     if (input) {
       input.classList.add("is-invalid");
+
+      const feedback = input.nextElementSibling;
+      if (feedback && feedback.classList.contains("invalid-feedback")) {
+        feedback.textContent = message;
+      }
+    }
+  }
+
+  function showCustomError(errorId, message) {
+    const errorEl = document.getElementById(errorId);
+    if (errorEl) {
+      errorEl.textContent = message;
     }
   }
 
@@ -87,35 +104,42 @@ document.addEventListener("DOMContentLoaded", function () {
       const coverage = getSelectedRadioValue("autoCoverage");
 
       if (name.value.trim().length < 2) {
-        showError(name);
+        showError(name, "Please enter at least 2 characters for your full name.");
         isValid = false;
       }
+
       if (age.value === "" || age.value < 16 || age.value > 100) {
-        showError(age);
+        showError(age, "Please enter a valid age between 16 and 100.");
         isValid = false;
       }
+
       if (!validateZip(zip.value)) {
-        showError(zip);
+        showError(zip, "ZIP code must be exactly 5 digits.");
         isValid = false;
       }
+
       if (year.value === "" || year.value < 1990 || year.value > 2026) {
-        showError(year);
+        showError(year, "Vehicle year must be between 1990 and 2026.");
         isValid = false;
       }
+
       if (make.value === "") {
-        showError(make);
+        showError(make, "Please select a vehicle make.");
         isValid = false;
       }
+
       if (model.value.trim().length < 2) {
-        showError(model);
+        showError(model, "Please enter at least 2 characters for the vehicle model.");
         isValid = false;
       }
+
       if (mileage.value === "") {
-        showError(mileage);
+        showError(mileage, "Please select annual mileage.");
         isValid = false;
       }
+
       if (!coverage) {
-        alert("Please select Auto coverage level.");
+        showCustomError("autoCoverageError", "Please select Auto coverage level.");
         isValid = false;
       }
     }
@@ -134,35 +158,42 @@ document.addEventListener("DOMContentLoaded", function () {
       const coverage = getSelectedRadioValue("homeCoverage");
 
       if (name.value.trim().length < 2) {
-        showError(name);
+        showError(name, "Please enter at least 2 characters for your full name.");
         isValid = false;
       }
+
       if (age.value === "" || age.value < 18 || age.value > 100) {
-        showError(age);
+        showError(age, "Please enter a valid age between 18 and 100.");
         isValid = false;
       }
+
       if (!validateZip(zip.value)) {
-        showError(zip);
+        showError(zip, "ZIP code must be exactly 5 digits.");
         isValid = false;
       }
+
       if (value.value === "" || value.value < 50000) {
-        showError(value);
+        showError(value, "Home value must be at least $50,000.");
         isValid = false;
       }
+
       if (yearBuilt.value === "" || yearBuilt.value < 1900 || yearBuilt.value > 2026) {
-        showError(yearBuilt);
+        showError(yearBuilt, "Year built must be between 1900 and 2026.");
         isValid = false;
       }
+
       if (sqft.value === "" || sqft.value < 500 || sqft.value > 10000) {
-        showError(sqft);
+        showError(sqft, "Square footage must be between 500 and 10,000.");
         isValid = false;
       }
+
       if (construction.value === "") {
-        showError(construction);
+        showError(construction, "Please select a construction type.");
         isValid = false;
       }
+
       if (!coverage) {
-        alert("Please select Home coverage level.");
+        showCustomError("homeCoverageError", "Please select Home coverage level.");
         isValid = false;
       }
     }
@@ -181,42 +212,48 @@ document.addEventListener("DOMContentLoaded", function () {
       const coverage = getSelectedRadioValue("lifeCoverage");
 
       if (name.value.trim().length < 2) {
-        showError(name);
+        showError(name, "Please enter at least 2 characters for your full name.");
         isValid = false;
       }
+
       if (age.value === "" || age.value < 18 || age.value > 85) {
-        showError(age);
+        showError(age, "Please enter a valid age between 18 and 85.");
         isValid = false;
       }
+
       if (!validateZip(zip.value)) {
-        showError(zip);
+        showError(zip, "ZIP code must be exactly 5 digits.");
         isValid = false;
       }
+
       if (gender.value === "") {
-        showError(gender);
+        showError(gender, "Please select your gender.");
         isValid = false;
       }
+
       if (!smoker) {
-        alert("Please select smoker Yes or No.");
+        showCustomError("smokerError", "Please select smoker Yes or No.");
         isValid = false;
       }
+
       if (amount.value === "") {
-        showError(amount);
+        showError(amount, "Please select a coverage amount.");
         isValid = false;
       }
+
       if (exercise.value === "") {
-        showError(exercise);
+        showError(exercise, "Please select your exercise frequency.");
         isValid = false;
       }
+
       if (!coverage) {
-        alert("Please select Life coverage level.");
+        showCustomError("lifeCoverageError", "Please select Life coverage level.");
         isValid = false;
       }
     }
 
     return isValid;
   }
-
 
   // =========================================
   // STEP 8: QUOTE CALCULATION
@@ -368,91 +405,27 @@ document.addEventListener("DOMContentLoaded", function () {
     monthlyPremium.textContent = formatCurrency(premium);
     annualPremium.textContent = formatCurrency(premium * 12);
 
-    // Clear old rows before adding new ones
     breakdownBody.innerHTML = "";
 
-    // Add breakdown rows for Auto
     if (type === "auto") {
-      addBreakdownRow(
-        breakdownBody,
-        "Age",
-        document.getElementById("autoAge").value,
-        "Young/older driver adjustment"
-      );
-      addBreakdownRow(
-        breakdownBody,
-        "Vehicle Year",
-        document.getElementById("vehicleYear").value,
-        "Vehicle age adjustment"
-      );
-      addBreakdownRow(
-        breakdownBody,
-        "Mileage",
-        document.getElementById("annualMileage").value,
-        "Mileage adjustment"
-      );
-      addBreakdownRow(
-        breakdownBody,
-        "Coverage Level",
-        getSelectedRadioValue("autoCoverage"),
-        "Coverage multiplier"
-      );
+      addBreakdownRow(breakdownBody, "Age", document.getElementById("autoAge").value, "Young/older driver adjustment");
+      addBreakdownRow(breakdownBody, "Vehicle Year", document.getElementById("vehicleYear").value, "Vehicle age adjustment");
+      addBreakdownRow(breakdownBody, "Mileage", document.getElementById("annualMileage").value, "Mileage adjustment");
+      addBreakdownRow(breakdownBody, "Coverage Level", getSelectedRadioValue("autoCoverage"), "Coverage multiplier");
     }
 
-    // Add breakdown rows for Home
     if (type === "home") {
-      addBreakdownRow(
-        breakdownBody,
-        "Home Value",
-        document.getElementById("homeValue").value,
-        "Base premium based on home value"
-      );
-      addBreakdownRow(
-        breakdownBody,
-        "Year Built",
-        document.getElementById("yearBuilt").value,
-        "Age of home adjustment"
-      );
-      addBreakdownRow(
-        breakdownBody,
-        "Square Footage",
-        document.getElementById("squareFootage").value,
-        "Size adjustment"
-      );
-      addBreakdownRow(
-        breakdownBody,
-        "Coverage Level",
-        getSelectedRadioValue("homeCoverage"),
-        "Coverage multiplier"
-      );
+      addBreakdownRow(breakdownBody, "Home Value", document.getElementById("homeValue").value, "Base premium based on home value");
+      addBreakdownRow(breakdownBody, "Year Built", document.getElementById("yearBuilt").value, "Age of home adjustment");
+      addBreakdownRow(breakdownBody, "Square Footage", document.getElementById("squareFootage").value, "Size adjustment");
+      addBreakdownRow(breakdownBody, "Coverage Level", getSelectedRadioValue("homeCoverage"), "Coverage multiplier");
     }
 
-    // Add breakdown rows for Life
     if (type === "life") {
-      addBreakdownRow(
-        breakdownBody,
-        "Age",
-        document.getElementById("lifeAge").value,
-        "Age-based risk adjustment"
-      );
-      addBreakdownRow(
-        breakdownBody,
-        "Coverage Amount",
-        document.getElementById("coverageAmount").value,
-        "Policy size adjustment"
-      );
-      addBreakdownRow(
-        breakdownBody,
-        "Smoker",
-        document.querySelector('input[name="smoker"]:checked').value,
-        "Health risk adjustment"
-      );
-      addBreakdownRow(
-        breakdownBody,
-        "Exercise Frequency",
-        document.getElementById("exerciseFrequency").value,
-        "Lifestyle adjustment"
-      );
+      addBreakdownRow(breakdownBody, "Age", document.getElementById("lifeAge").value, "Age-based risk adjustment");
+      addBreakdownRow(breakdownBody, "Coverage Amount", document.getElementById("coverageAmount").value, "Policy size adjustment");
+      addBreakdownRow(breakdownBody, "Smoker", document.querySelector('input[name="smoker"]:checked').value, "Health risk adjustment");
+      addBreakdownRow(breakdownBody, "Exercise Frequency", document.getElementById("exerciseFrequency").value, "Lifestyle adjustment");
     }
 
     resultsSection.classList.remove("hidden");
@@ -490,4 +463,4 @@ document.addEventListener("DOMContentLoaded", function () {
     resultsSection.classList.add("hidden");
   });
 });
-  
+
