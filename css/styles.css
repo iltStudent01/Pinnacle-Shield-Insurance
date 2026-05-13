@@ -1,21 +1,49 @@
-/* General page styles */
+/* =========================================
+   RESET
+========================================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* =========================================
+   GENERAL PAGE STYLES
+========================================= */
 body {
   font-family: Arial, sans-serif;
   background-color: #f8f9fa;
   color: #212529;
+  line-height: 1.6;
 }
 
-/* Navbar brand */
+a {
+  text-decoration: none;
+}
+
+/* =========================================
+   NAVBAR
+========================================= */
 .navbar-brand {
   font-weight: bold;
   letter-spacing: 0.5px;
 }
 
-/* Hero / main section */
+.navbar-nav .nav-link {
+  transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #ffc107 !important;
+}
+
+/* =========================================
+   HOMEPAGE HERO
+========================================= */
 main {
   min-height: 80vh;
 }
-/* Custom card-style box */
+
 .hero-box {
   background: white;
   border-radius: 12px;
@@ -23,7 +51,6 @@ main {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* Button hover effect */
 .btn-primary {
   transition: all 0.3s ease;
 }
@@ -32,6 +59,126 @@ main {
   transform: translateY(-2px);
   box-shadow: 0 6px 14px rgba(13, 110, 253, 0.25);
 }
+
+/* =========================================
+   CARDS / SECTIONS
+========================================= */
+.card {
+  transition: all 0.3s ease;
+  border-radius: 12px;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* =========================================
+   QUOTE PAGE
+========================================= */
 .hidden {
   display: none;
+}
+
+#quoteForm {
+  border-radius: 12px;
+}
+
+#resultsSection .card {
+  border-radius: 12px;
+}
+
+#resultsSection {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Custom red text blocks for radio validation */
+.text-danger.small {
+  min-height: 1rem;
+}
+
+/* Bootstrap invalid-feedback support */
+.invalid-feedback {
+  font-size: 0.875rem;
+}
+
+/* If you want inputs to feel a little nicer */
+.form-control,
+.form-select {
+  border-radius: 8px;
+}
+
+/* Style radio button groups a little better */
+.form-check-inline {
+  margin-right: 1rem;
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+footer {
+  background-color: #212529;
+  color: #f8f9fa;
+}
+
+footer p {
+  margin-bottom: 0;
+}
+
+/* =========================================
+   ANIMATION
+========================================= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================
+   RESPONSIVE DESIGN
+========================================= */
+@media (max-width: 768px) {
+  .hero-box {
+    padding: 1.5rem;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  .card {
+    margin-bottom: 1rem;
+  }
+
+  .navbar-nav {
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-box {
+    padding: 1rem;
+  }
+
+  .btn-lg {
+    width: 100%;
+  }
+
+  .form-check-inline {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  #quoteForm {
+    padding: 1rem !important;
+  }
+
+  #resultsSection {
+    margin-top: 2rem;
+  }
 }
