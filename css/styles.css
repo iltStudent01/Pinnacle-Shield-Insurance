@@ -1,3 +1,14 @@
+/* Field error styling for quote form */
+.is-invalid {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 2px #f8d7da !important;
+}
+.invalid-feedback {
+  color: #dc3545;
+  display: none;
+  font-size: 0.95em;
+  margin-top: 0.15rem;
+}
 /* =========================================
    QUOTE FORM LAYOUT & BUTTON
 ========================================= */

@@ -10,14 +10,28 @@ document.addEventListener("DOMContentLoaded", function () {
   const resetComparisonBtn = document.getElementById("resetComparisonBtn");
   const quoteForm = document.getElementById("quoteForm");
 
+
   // Card-based insurance type selection
   const insuranceCards = document.querySelectorAll('.insurance-card');
   let selectedType = null;
+  const step2Heading = document.getElementById('step2-heading');
 
   function hideAllFields() {
     autoFields.classList.add("hidden");
     homeFields.classList.add("hidden");
     lifeFields.classList.add("hidden");
+  }
+
+  function updateStep2Heading(type) {
+    if (!type) {
+      step2Heading.textContent = 'Step 2: Insurance Details';
+    } else if (type === 'auto') {
+      step2Heading.textContent = 'Step 2: Auto Insurance Details';
+    } else if (type === 'home') {
+      step2Heading.textContent = 'Step 2: Home Insurance Details';
+    } else if (type === 'life') {
+      step2Heading.textContent = 'Step 2: Life Insurance Details';
+    }
   }
 
   insuranceCards.forEach(function(card) {
@@ -27,6 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
       selectedType = this.getAttribute('data-type');
       // Show relevant fields
       hideAllFields();
+      updateStep2Heading(selectedType);
       if (selectedType === "auto") {
         autoFields.classList.remove("hidden");
       } else if (selectedType === "home") {
@@ -41,6 +56,117 @@ document.addEventListener("DOMContentLoaded", function () {
         this.click();
       }
     });
+  });
+
+  // --- Validation ---
+  function showAlert(message) {
+    // Remove any existing alert
+    let oldAlert = document.getElementById('quote-alert');
+    if (oldAlert) oldAlert.remove();
+    // Create new alert
+    const alert = document.createElement('div');
+    alert.className = 'alert alert-danger text-center';
+    alert.id = 'quote-alert';
+    alert.textContent = message;
+    quoteForm.prepend(alert);
+    setTimeout(() => { if (alert) alert.remove(); }, 4000);
+  }
+
+  function clearFieldErrors(formSection) {
+    const invalids = formSection.querySelectorAll('.is-invalid');
+    invalids.forEach(el => el.classList.remove('is-invalid'));
+    const feedbacks = formSection.querySelectorAll('.invalid-feedback');
+    feedbacks.forEach(el => el.style.display = 'none');
+  }
+
+  function setFieldError(input, message) {
+    input.classList.add('is-invalid');
+    const feedback = input.parentElement.querySelector('.invalid-feedback');
+    if (feedback) {
+      feedback.textContent = message;
+      feedback.style.display = 'block';
+    }
+  }
+
+  calculateBtn.addEventListener('click', function(e) {
+    // Remove previous alert
+    let oldAlert = document.getElementById('quote-alert');
+    if (oldAlert) oldAlert.remove();
+    // Validate insurance type
+    if (!selectedType) {
+      showAlert('Please select an insurance type.');
+      return;
+    }
+    // Validate fields for selected type
+    let valid = true;
+    let section = null;
+    if (selectedType === 'auto') section = autoFields;
+    if (selectedType === 'home') section = homeFields;
+    if (selectedType === 'life') section = lifeFields;
+    clearFieldErrors(section);
+    // Validate required fields
+    if (selectedType === 'auto') {
+      const name = section.querySelector('#autoName');
+      if (!name.value || name.value.trim().length < 2) { setFieldError(name, 'Please enter at least 2 characters for your full name.'); valid = false; }
+      const age = section.querySelector('#autoAge');
+      if (!age.value || +age.value < 16 || +age.value > 100) { setFieldError(age, 'Please enter a valid age between 16 and 100.'); valid = false; }
+      const zip = section.querySelector('#autoZip');
+      if (!zip.value || !/^\d{5}$/.test(zip.value)) { setFieldError(zip, 'ZIP code must be exactly 5 digits.'); valid = false; }
+      const year = section.querySelector('#vehicleYear');
+      if (!year.value || +year.value < 1990 || +year.value > 2026) { setFieldError(year, 'Vehicle year must be between 1990 and 2026.'); valid = false; }
+      const make = section.querySelector('#vehicleMake');
+      if (!make.value) { setFieldError(make, 'Please select a vehicle make.'); valid = false; }
+      const model = section.querySelector('#vehicleModel');
+      if (!model.value || model.value.trim().length < 2) { setFieldError(model, 'Please enter at least 2 characters for the vehicle model.'); valid = false; }
+      const mileage = section.querySelector('#annualMileage');
+      if (!mileage.value) { setFieldError(mileage, 'Please select annual mileage.'); valid = false; }
+      const record = section.querySelector('#drivingRecord');
+      if (!record.value) { setFieldError(record, 'Please select your driving record.'); valid = false; }
+      const coverage = section.querySelector('input[name="autoCoverage"]:checked');
+      if (!coverage) { document.getElementById('autoCoverageError').textContent = 'Please select a coverage level.'; valid = false; }
+      else { document.getElementById('autoCoverageError').textContent = ''; }
+    }
+    if (selectedType === 'home') {
+      const name = section.querySelector('#homeName');
+      if (!name.value || name.value.trim().length < 2) { setFieldError(name, 'Please enter at least 2 characters for your full name.'); valid = false; }
+      const age = section.querySelector('#homeAge');
+      if (!age.value || +age.value < 18 || +age.value > 100) { setFieldError(age, 'Please enter a valid age between 18 and 100.'); valid = false; }
+      const zip = section.querySelector('#homeZip');
+      if (!zip.value || !/^\d{5}$/.test(zip.value)) { setFieldError(zip, 'ZIP code must be exactly 5 digits.'); valid = false; }
+      const value = section.querySelector('#homeValue');
+      if (!value.value || +value.value < 50000) { setFieldError(value, 'Home value must be at least $50,000.'); valid = false; }
+      const year = section.querySelector('#yearBuilt');
+      if (!year.value || +year.value < 1900 || +year.value > 2026) { setFieldError(year, 'Year built must be between 1900 and 2026.'); valid = false; }
+      const sqft = section.querySelector('#squareFootage');
+      if (!sqft.value || +sqft.value < 500 || +sqft.value > 10000) { setFieldError(sqft, 'Square footage must be between 500 and 10,000.'); valid = false; }
+      const constr = section.querySelector('#constructionType');
+      if (!constr.value) { setFieldError(constr, 'Please select a construction type.'); valid = false; }
+      const coverage = section.querySelector('input[name="homeCoverage"]:checked');
+      if (!coverage) { document.getElementById('homeCoverageError').textContent = 'Please select a coverage level.'; valid = false; }
+      else { document.getElementById('homeCoverageError').textContent = ''; }
+    }
+    if (selectedType === 'life') {
+      const name = section.querySelector('#lifeName');
+      if (!name.value || name.value.trim().length < 2) { setFieldError(name, 'Please enter at least 2 characters for your full name.'); valid = false; }
+      const age = section.querySelector('#lifeAge');
+      if (!age.value || +age.value < 18 || +age.value > 85) { setFieldError(age, 'Please enter a valid age between 18 and 85.'); valid = false; }
+      const zip = section.querySelector('#lifeZip');
+      if (!zip.value || !/^\d{5}$/.test(zip.value)) { setFieldError(zip, 'ZIP code must be exactly 5 digits.'); valid = false; }
+      const gender = section.querySelector('#gender');
+      if (!gender.value) { setFieldError(gender, 'Please select your gender.'); valid = false; }
+      const smoker = section.querySelector('input[name="smoker"]:checked');
+      if (!smoker) { document.getElementById('smokerError').textContent = 'Please select smoker status.'; valid = false; }
+      else { document.getElementById('smokerError').textContent = ''; }
+      const amount = section.querySelector('#coverageAmount');
+      if (!amount.value) { setFieldError(amount, 'Please select a coverage amount.'); valid = false; }
+      const exercise = section.querySelector('#exerciseFrequency');
+      if (!exercise.value) { setFieldError(exercise, 'Please select your exercise frequency.'); valid = false; }
+      const coverage = section.querySelector('input[name="lifeCoverage"]:checked');
+      if (!coverage) { document.getElementById('lifeCoverageError').textContent = 'Please select a coverage level.'; valid = false; }
+      else { document.getElementById('lifeCoverageError').textContent = ''; }
+    }
+    if (!valid) return;
+    // If valid, continue with quote calculation (existing logic)
   });
 
   // If user submits without selecting, show error (optional: add error UI)
