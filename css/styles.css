@@ -1,6 +1,12 @@
 .products-section .card {
-  background: #eaf4ef;
-  border: 1px solid #d1e7dd;
+  background: #eaf4ef !important;
+  border: 1px solid #b7d8c7;
+}
+
+.product-emoji {
+  display: block;
+  font-size: 3rem;
+  margin-bottom: 1rem;
 }
 /* =========================================
    RESET
