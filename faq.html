@@ -72,7 +72,7 @@
     <div class="accordion" id="faqAccordion">
 
       <!-- FAQ 1 -->
-      <div class="accordion-item">
+      <div class="accordion-item accordionitem">
         <h2 class="accordion-header" id="headingOne">
           <button
             class="accordion-button"
@@ -99,7 +99,7 @@
       </div>
 
       <!-- FAQ 2 -->
-      <div class="accordion-item">
+      <div class="accordion-item accordionitem">
         <h2 class="accordion-header" id="headingTwo">
           <button
             class="accordion-button collapsed"
@@ -127,7 +127,7 @@
       </div>
 
       <!-- FAQ 3 -->
-      <div class="accordion-item">
+      <div class="accordion-item accordionitem">
         <h2 class="accordion-header" id="headingThree">
           <button
             class="accordion-button collapsed"
@@ -154,7 +154,7 @@
       </div>
 
       <!-- FAQ 4 -->
-      <div class="accordion-item">
+      <div class="accordion-item accordionitem">
         <h2 class="accordion-header" id="headingFour">
           <button
             class="accordion-button collapsed"
@@ -182,7 +182,7 @@
       </div>
 
       <!-- FAQ 5 -->
-      <div class="accordion-item">
+      <div class="accordion-item accordionitem">
         <h2 class="accordion-header" id="headingFive">
           <button
             class="accordion-button collapsed"
@@ -209,7 +209,7 @@
       </div>
 
       <!-- FAQ 6 -->
-      <div class="accordion-item">
+      <div class="accordion-item accordionitem">
         <h2 class="accordion-header" id="headingSix">
           <button
             class="accordion-button collapsed"
@@ -237,7 +237,7 @@
       </div>
 
       <!-- FAQ 7 -->
-      <div class="accordion-item">
+      <div class="accordion-item accordionitem">
         <h2 class="accordion-header" id="headingSeven">
           <button
             class="accordion-button collapsed"
@@ -265,7 +265,7 @@
       </div>
 
       <!-- FAQ 8 -->
-      <div class="accordion-item">
+      <div class="accordion-item accordionitem">
         <h2 class="accordion-header" id="headingEight">
           <button
             class="accordion-button collapsed"
@@ -299,11 +299,14 @@
   <footer class="site-footer text-light pt-4 mt-5">
     <div class="container">
       <div class="row">
-        <div class="col-md-4 mb-4">
-          <h5>Pinnacle Shield Insurance</h5>
-          <p>Protecting families since 1985. Headquartered in Hartford, CT.</p>
+        <div class="col-md-4 mb-4 d-flex align-items-center">
+          <svg width="32" height="32" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="64" height="64" rx="12" fill="#4B6E57"/>
+            <path d="M32 8L52 16V32C52 44 32 56 32 56C32 56 12 44 12 32V16L32 8Z" fill="#fff" stroke="#4B6E57" stroke-width="2"/>
+            <text x="50%" y="50%" text-anchor="middle" fill="#4B6E57" font-size="20" font-family="Arial" dy=".3em">P</text>
+          </svg>
+          <span style="font-weight:bold; margin-left:8px;">Pinnacle Shield Insurance</span>
         </div>
-
         <div class="col-md-4 mb-4">
           <h5>Quick Links</h5>
           <ul class="list-unstyled">
@@ -313,15 +316,13 @@
             <li><a class="footer-link" href="faq.html">FAQ</a></li>
           </ul>
         </div>
-
         <div class="col-md-4 mb-4">
           <h5>Contact</h5>
-          <p class="mb-1">info@pinnacleshield.com</p>
-          <p class="mb-1">1-800-555-SHIELD</p>
-          <p>250 Constitution Plaza, Hartford, CT 06103</p>
+          <p class="mb-1">📞 1-800-555-SHIELD</p>
+          <p class="mb-1">✉️ info@pinnacleshield.com</p>
+          <p>📍 250 Constitution Plaza, Hartford, CT 06103</p>
         </div>
       </div>
-
       <hr class="border-secondary" />
       <p class="text-center mb-0 pb-3">
         &copy; 2026 Pinnacle Shield Insurance. All rights reserved.
@@ -336,5 +337,22 @@
 
   <!-- Main JS -->
   <script src="js/main.js"></script>
+  <script>
+    var searchInput = document.getElementById('faq-search');
+    if (searchInput) {
+      searchInput.addEventListener('input', function() {
+        var searchTerm = this.value.toLowerCase();
+        var items = document.querySelectorAll('.accordionitem');
+        items.forEach(function(item) {
+          var text = item.textContent.toLowerCase();
+          if (text.indexOf(searchTerm) !== -1) {
+            item.style.display = '';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    }
+  </script>
 </body>
 </html>
