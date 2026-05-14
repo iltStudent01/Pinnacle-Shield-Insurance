@@ -38,34 +38,22 @@ a {
 }
 
 /* =========================================
-   HOMEPAGE HERO
+   HERO SECTION
 ========================================= */
-main {
-  min-height: 80vh;
+.hero-section {
+  background: linear-gradient(90deg, #0d6efd, #0a58ca);
 }
 
-.hero-box {
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.btn-primary {
-  transition: all 0.3s ease;
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(13, 110, 253, 0.25);
+.hero-section .btn-warning {
+  font-weight: bold;
 }
 
 /* =========================================
-   CARDS / SECTIONS
+   CARDS
 ========================================= */
 .card {
-  transition: all 0.3s ease;
   border-radius: 12px;
+  transition: all 0.3s ease;
 }
 
 .card:hover {
@@ -80,49 +68,47 @@ main {
   display: none;
 }
 
-#quoteForm {
-  border-radius: 12px;
-}
-
-#resultsSection .card {
-  border-radius: 12px;
-}
-
-#resultsSection {
+#resultsSection,
+#comparisonSection {
   animation: fadeIn 0.4s ease-in-out;
 }
 
-/* Custom red text blocks for radio validation */
-.text-danger.small {
-  min-height: 1rem;
-}
-
-/* Bootstrap invalid-feedback support */
-.invalid-feedback {
-  font-size: 0.875rem;
-}
-
-/* If you want inputs to feel a little nicer */
 .form-control,
 .form-select {
   border-radius: 8px;
 }
 
-/* Style radio button groups a little better */
-.form-check-inline {
-  margin-right: 1rem;
+.text-danger.small {
+  min-height: 1rem;
+}
+
+.invalid-feedback {
+  font-size: 0.875rem;
+}
+
+/* =========================================
+   RESULTS / COMPARISON
+========================================= */
+#resultsSection .card,
+#comparisonSection .card {
+  border-radius: 12px;
 }
 
 /* =========================================
    FOOTER
 ========================================= */
-footer {
+.site-footer {
   background-color: #212529;
-  color: #f8f9fa;
 }
 
-footer p {
-  margin-bottom: 0;
+.footer-link {
+  color: #f8f9fa;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  color: #ffc107;
+  text-decoration: underline;
 }
 
 /* =========================================
@@ -143,12 +129,13 @@ footer p {
    RESPONSIVE DESIGN
 ========================================= */
 @media (max-width: 768px) {
-  .hero-box {
-    padding: 1.5rem;
+  .hero-section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
   }
 
-  h1 {
-    font-size: 1.8rem;
+  .hero-section h1 {
+    font-size: 2rem;
   }
 
   .card {
@@ -161,12 +148,12 @@ footer p {
 }
 
 @media (max-width: 480px) {
-  .hero-box {
-    padding: 1rem;
-  }
-
   .btn-lg {
     width: 100%;
+  }
+
+  #quoteForm {
+    padding: 1rem !important;
   }
 
   .form-check-inline {
@@ -174,11 +161,7 @@ footer p {
     margin-bottom: 0.5rem;
   }
 
-  #quoteForm {
-    padding: 1rem !important;
-  }
-
-  #resultsSection {
-    margin-top: 2rem;
+  .hero-section .lead {
+    font-size: 1rem;
   }
 }
