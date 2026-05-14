@@ -90,7 +90,267 @@
             </div>
           </div>
           <hr class="my-4" />
-          <!-- ...existing form fields for auto/home/life... -->
+          <!-- Step 2: Details Section -->
+          <div id="details-section" class="mb-4">
+            <!-- Auto Fields -->
+            <div id="auto-fields" class="hidden">
+              <h3 class="h6 mb-3">Auto Insurance Details</h3>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="autoName" class="form-label">Full Name</label>
+                  <input type="text" class="form-control" id="autoName" name="autoName">
+                  <div class="invalid-feedback">Please enter at least 2 characters for your full name.</div>
+                </div>
+                <div class="col-md-3">
+                  <label for="autoAge" class="form-label">Age</label>
+                  <input type="number" class="form-control" id="autoAge" name="autoAge">
+                  <div class="invalid-feedback">Please enter a valid age between 16 and 100.</div>
+                </div>
+                <div class="col-md-3">
+                  <label for="autoZip" class="form-label">ZIP Code</label>
+                  <input type="text" class="form-control" id="autoZip" name="autoZip">
+                  <div class="invalid-feedback">ZIP code must be exactly 5 digits.</div>
+                </div>
+                <div class="col-md-3">
+                  <label for="vehicleYear" class="form-label">Vehicle Year</label>
+                  <input type="number" class="form-control" id="vehicleYear" name="vehicleYear">
+                  <div class="invalid-feedback">Vehicle year must be between 1990 and 2026.</div>
+                </div>
+                <div class="col-md-3">
+                  <label for="vehicleMake" class="form-label">Vehicle Make</label>
+                  <select class="form-select" id="vehicleMake" name="vehicleMake">
+                    <option value="">Select a make</option>
+                    <option value="Toyota">Toyota</option>
+                    <option value="Honda">Honda</option>
+                    <option value="Ford">Ford</option>
+                    <option value="BMW">BMW</option>
+                    <option value="Tesla">Tesla</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <div class="invalid-feedback">Please select a vehicle make.</div>
+                </div>
+                <div class="col-md-3">
+                  <label for="vehicleModel" class="form-label">Vehicle Model</label>
+                  <input type="text" class="form-control" id="vehicleModel" name="vehicleModel">
+                  <div class="invalid-feedback">Please enter at least 2 characters for the vehicle model.</div>
+                </div>
+                <div class="col-md-3">
+                  <label for="annualMileage" class="form-label">Annual Mileage</label>
+                  <select class="form-select" id="annualMileage" name="annualMileage">
+                    <option value="">Select mileage</option>
+                    <option value="under5000">Under 5,000</option>
+                    <option value="5000-10000">5,000–10,000</option>
+                    <option value="10001-15000">10,001–15,000</option>
+                    <option value="15001-20000">15,001–20,000</option>
+                    <option value="over20000">Over 20,000</option>
+                  </select>
+                  <div class="invalid-feedback">Please select annual mileage.</div>
+                </div>
+                <div class="col-md-3">
+                  <label for="drivingRecord" class="form-label">Driving Record</label>
+                  <select class="form-select" id="drivingRecord" name="drivingRecord">
+                    <option value="">Select record</option>
+                    <option value="clean">Clean</option>
+                    <option value="1ticket">1 Ticket</option>
+                    <option value="2plus">2+ Tickets</option>
+                    <option value="accident">Accident in Last 3 Years</option>
+                  </select>
+                  <div class="invalid-feedback">Please select your driving record.</div>
+                </div>
+                <div class="col-md-12">
+                  <label class="form-label d-block">Coverage Level</label>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="autoCoverage" id="autoBasic" value="basic">
+                    <label class="form-check-label" for="autoBasic">Basic</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="autoCoverage" id="autoStandard" value="standard">
+                    <label class="form-check-label" for="autoStandard">Standard</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="autoCoverage" id="autoPremium" value="premium">
+                    <label class="form-check-label" for="autoPremium">Premium</label>
+                  </div>
+                  <div class="text-danger small mt-1" id="autoCoverageError"></div>
+                </div>
+              </div>
+            </div>
+            <!-- Home Fields -->
+            <div id="home-fields" class="hidden">
+              <h3 class="h6 mb-3">Home Insurance Details</h3>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="homeName" class="form-label">Full Name</label>
+                  <input type="text" class="form-control" id="homeName" name="homeName">
+                  <div class="invalid-feedback">Please enter at least 2 characters for your full name.</div>
+                </div>
+                <div class="col-md-3">
+                  <label for="homeAge" class="form-label">Age</label>
+                  <input type="number" class="form-control" id="homeAge" name="homeAge">
+                  <div class="invalid-feedback">Please enter a valid age between 18 and 100.</div>
+                </div>
+                <div class="col-md-3">
+                  <label for="homeZip" class="form-label">ZIP Code</label>
+                  <input type="text" class="form-control" id="homeZip" name="homeZip">
+                  <div class="invalid-feedback">ZIP code must be exactly 5 digits.</div>
+                </div>
+                <div class="col-md-4">
+                  <label for="homeValue" class="form-label">Home Value</label>
+                  <input type="number" class="form-control" id="homeValue" name="homeValue">
+                  <div class="invalid-feedback">Home value must be at least $50,000.</div>
+                </div>
+                <div class="col-md-4">
+                  <label for="yearBuilt" class="form-label">Year Built</label>
+                  <input type="number" class="form-control" id="yearBuilt" name="yearBuilt">
+                  <div class="invalid-feedback">Year built must be between 1900 and 2026.</div>
+                </div>
+                <div class="col-md-4">
+                  <label for="squareFootage" class="form-label">Square Footage</label>
+                  <input type="number" class="form-control" id="squareFootage" name="squareFootage">
+                  <div class="invalid-feedback">Square footage must be between 500 and 10,000.</div>
+                </div>
+                <div class="col-md-4">
+                  <label for="constructionType" class="form-label">Construction Type</label>
+                  <select class="form-select" id="constructionType" name="constructionType">
+                    <option value="">Select construction type</option>
+                    <option value="wood">Wood Frame</option>
+                    <option value="brick">Brick</option>
+                    <option value="concrete">Concrete</option>
+                    <option value="steel">Steel</option>
+                  </select>
+                  <div class="invalid-feedback">Please select a construction type.</div>
+                </div>
+                <div class="col-md-4 d-flex align-items-center">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="securitySystem" name="securitySystem">
+                    <label class="form-check-label" for="securitySystem">Has Security System</label>
+                  </div>
+                </div>
+                <div class="col-md-4 d-flex align-items-center">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="fireSprinklers" name="fireSprinklers">
+                    <label class="form-check-label" for="fireSprinklers">Has Fire Sprinklers</label>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <label class="form-label d-block">Coverage Level</label>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="homeCoverage" id="homeBasic" value="basic">
+                    <label class="form-check-label" for="homeBasic">Basic</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="homeCoverage" id="homeStandard" value="standard">
+                    <label class="form-check-label" for="homeStandard">Standard</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="homeCoverage" id="homePremium" value="premium">
+                    <label class="form-check-label" for="homePremium">Premium</label>
+                  </div>
+                  <div class="text-danger small mt-1" id="homeCoverageError"></div>
+                </div>
+              </div>
+            </div>
+            <!-- Life Fields -->
+            <div id="life-fields" class="hidden">
+              <h3 class="h6 mb-3">Life Insurance Details</h3>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="lifeName" class="form-label">Full Name</label>
+                  <input type="text" class="form-control" id="lifeName" name="lifeName">
+                  <div class="invalid-feedback">Please enter at least 2 characters for your full name.</div>
+                </div>
+                <div class="col-md-3">
+                  <label for="lifeAge" class="form-label">Age</label>
+                  <input type="number" class="form-control" id="lifeAge" name="lifeAge">
+                  <div class="invalid-feedback">Please enter a valid age between 18 and 85.</div>
+                </div>
+                <div class="col-md-3">
+                  <label for="lifeZip" class="form-label">ZIP Code</label>
+                  <input type="text" class="form-control" id="lifeZip" name="lifeZip">
+                  <div class="invalid-feedback">ZIP code must be exactly 5 digits.</div>
+                </div>
+                <div class="col-md-3">
+                  <label for="gender" class="form-label">Gender</label>
+                  <select class="form-select" id="gender" name="gender">
+                    <option value="">Select gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="nonbinary">Non-binary</option>
+                  </select>
+                  <div class="invalid-feedback">Please select your gender.</div>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label d-block">Smoker</label>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="smoker" id="smokerYes" value="yes">
+                    <label class="form-check-label" for="smokerYes">Yes</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="smoker" id="smokerNo" value="no">
+                    <label class="form-check-label" for="smokerNo">No</label>
+                  </div>
+                  <div class="text-danger small mt-1" id="smokerError"></div>
+                </div>
+                <div class="col-md-3">
+                  <label for="coverageAmount" class="form-label">Coverage Amount</label>
+                  <select class="form-select" id="coverageAmount" name="coverageAmount">
+                    <option value="">Select amount</option>
+                    <option value="100000">$100,000</option>
+                    <option value="250000">$250,000</option>
+                    <option value="500000">$500,000</option>
+                    <option value="1000000">$1,000,000</option>
+                  </select>
+                  <div class="invalid-feedback">Please select a coverage amount.</div>
+                </div>
+                <div class="col-md-3">
+                  <label for="exerciseFrequency" class="form-label">Exercise Frequency</label>
+                  <select class="form-select" id="exerciseFrequency" name="exerciseFrequency">
+                    <option value="">Select frequency</option>
+                    <option value="rarely">Rarely</option>
+                    <option value="1-2">1–2 times/week</option>
+                    <option value="3-4">3–4 times/week</option>
+                    <option value="5plus">5+ times/week</option>
+                  </select>
+                  <div class="invalid-feedback">Please select your exercise frequency.</div>
+                </div>
+                <div class="col-md-3 d-flex align-items-center">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="preExistingConditions" name="preExistingConditions">
+                    <label class="form-check-label" for="preExistingConditions">Pre-existing Conditions</label>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <label class="form-label d-block">Coverage Level</label>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="lifeCoverage" id="lifeBasic" value="basic">
+                    <label class="form-check-label" for="lifeBasic">Basic</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="lifeCoverage" id="lifeStandard" value="standard">
+                    <label class="form-check-label" for="lifeStandard">Standard</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="lifeCoverage" id="lifePremium" value="premium">
+                    <label class="form-check-label" for="lifePremium">Premium</label>
+                  </div>
+                  <div class="text-danger small mt-1" id="lifeCoverageError"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Calculate Button -->
+          <div class="d-flex justify-content-center my-4">
+            <button type="button" id="calculateQuoteBtn" class="btn calculate-quote-btn px-5 py-3 fs-5 fw-bold">
+              Calculate My Quote
+            </button>
+          </div>
+          <!-- Saved Quotes Section -->
+          <div class="card shadow-sm mt-4 mb-0">
+            <div class="card-body">
+              <h2 class="h6 mb-3">Saved Quotes</h2>
+              <div id="savedQuotesList" class="text-muted small">No saved quotes yet. Calculate a quote and click "Save Quote" to save it.</div>
+            </div>
+          </div>
 
           <!-- Auto Fields -->
           <div id="auto-fields" class="hidden">
