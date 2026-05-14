@@ -17,36 +17,25 @@
 <body>
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
     <div class="container">
-      <a class="navbar-brand" href="index.html">Pinnacle Shield Insurance</a>
-
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <svg width="32" height="32" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="64" height="64" rx="12" fill="#4B6E57"/>
+          <path d="M32 8L52 16V32C52 44 32 56 32 56C32 56 12 44 12 32V16L32 8Z" fill="#fff" stroke="#4B6E57" stroke-width="2"/>
+          <text x="50%" y="50%" text-anchor="middle" fill="#4B6E57" font-size="20" font-family="Arial" dy=".3em">P</text>
+        </svg>
+        <span style="font-weight:bold; font-size:1.3rem; margin-left:8px;">Pinnacle Shield Insurance</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="index.html">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="quote.html">Get a Quote</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="about.html">About Us</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="faq.html">FAQ</a>
-          </li>
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="quote.html">Get a Quote</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About Us</a></li>
+          <li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
         </ul>
       </div>
     </div>
@@ -55,30 +44,53 @@
   <!-- Main content -->
   <main class="container my-5">
     <div class="row justify-content-center">
-      <div class="col-lg-10">
-
-        <h1 class="mb-3">Get Your Insurance Quote</h1>
-        <p class="mb-4">
-          Select an insurance type below, fill out the required information,
-          and calculate a mock quote instantly.
-        </p>
-
-        <!-- Quote form -->
+      <div class="col-lg-8 col-md-10">
+        <div class="text-center mb-4">
+          <h1 class="fw-bold mb-2">Get Your Insurance Quote</h1>
+          <p class="lead mb-3">Start your quote in just a few steps. Select your insurance type to begin.</p>
+        </div>
+        <!-- Step Progress Indicator -->
+        <div class="step-progress mb-5">
+          <div class="step active">
+            <span class="step-number">1</span>
+            <span class="step-label">Select Type</span>
+          </div>
+          <div class="step">
+            <span class="step-number">2</span>
+            <span class="step-label">Enter Details</span>
+          </div>
+          <div class="step">
+            <span class="step-number">3</span>
+            <span class="step-label">Get Quote</span>
+          </div>
+        </div>
         <form id="quoteForm" class="card shadow-sm p-4">
-
-          <!-- Insurance Type Selector -->
-          <div class="mb-4">
-            <h2 class="h5 mb-3">Select Insurance Type</h2>
-
-            <div class="d-flex flex-wrap gap-2">
-              <input type="radio" class="btn-check" name="insuranceType" id="autoType" value="auto" autocomplete="off">
-              <label class="btn btn-outline-primary" for="autoType"> Auto</label>
-              <input type="radio" class="btn-check" name="insuranceType" id="homeType" value="home" autocomplete="off">
-              <label class="btn btn-outline-primary" for="homeType"> Home</label>
-              <input type="radio" class="btn-check" name="insuranceType" id="lifeType" value="life" autocomplete="off">
-              <label class="btn btn-outline-primary" for="lifeType"> Life</label>
+          <h2 class="h5 mb-4">Step 1: Choose Insurance Type</h2>
+          <div class="row g-4 mb-4 insurance-type-cards">
+            <div class="col-md-4">
+              <div class="insurance-card insurance-auto selectable" data-type="auto" tabindex="0">
+                <div class="insurance-icon mb-2">🚗</div>
+                <div class="fw-semibold">Auto Insurance</div>
+                <div class="small text-muted">Car, truck, or other vehicle</div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="insurance-card insurance-home selectable" data-type="home" tabindex="0">
+                <div class="insurance-icon mb-2">🏠</div>
+                <div class="fw-semibold">Home Insurance</div>
+                <div class="small text-muted">House, condo, or apartment</div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="insurance-card insurance-life selectable" data-type="life" tabindex="0">
+                <div class="insurance-icon mb-2">❤️</div>
+                <div class="fw-semibold">Life Insurance</div>
+                <div class="small text-muted">Protect your loved ones</div>
+              </div>
             </div>
           </div>
+          <hr class="my-4" />
+          <!-- ...existing form fields for auto/home/life... -->
 
           <!-- Auto Fields -->
           <div id="auto-fields" class="hidden">
@@ -363,18 +375,22 @@
             </button>
           </div>
         </form>
-
-        <!-- Results Section -->
+        <!-- Saved Quotes Section -->
+        <div class="card shadow-sm mt-5">
+          <div class="card-body">
+            <h2 class="h6 mb-3">Saved Quotes</h2>
+            <div id="savedQuotesList" class="text-muted small">No saved quotes yet.</div>
+          </div>
+        </div>
+        <!-- Results Section (unchanged) -->
         <div id="resultsSection" class="hidden mt-5">
           <div class="card shadow-sm">
             <div class="card-body">
               <h2 class="card-title mb-3">Quote Results</h2>
-
               <p><strong>Name:</strong> <span id="quoteName"></span></p>
               <p><strong>Insurance Type:</strong> <span id="quoteType"></span></p>
               <p><strong>Monthly Premium:</strong> <span id="monthlyPremium"></span></p>
               <p><strong>Annual Premium:</strong> <span id="annualPremium"></span></p>
-
               <h3 class="h5 mt-4">Factor Breakdown</h3>
               <div class="table-responsive">
                 <table class="table table-striped">
@@ -388,7 +404,6 @@
                   <tbody id="breakdownBody"></tbody>
                 </table>
               </div>
-
               <button type="button" id="anotherQuoteBtn" class="btn btn-secondary">
                 Get Another Quote
               </button>
@@ -401,9 +416,35 @@
   </main>
 
   <!-- Footer -->
-  <footer class="bg-dark text-light py-3 mt-5">
-    <div class="container text-center">
-      <p class="mb-0">
+  <footer class="site-footer text-light pt-4 mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-4 d-flex align-items-center">
+          <svg width="32" height="32" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="64" height="64" rx="12" fill="#4B6E57"/>
+            <path d="M32 8L52 16V32C52 44 32 56 32 56C32 56 12 44 12 32V16L32 8Z" fill="#fff" stroke="#4B6E57" stroke-width="2"/>
+            <text x="50%" y="50%" text-anchor="middle" fill="#4B6E57" font-size="20" font-family="Arial" dy=".3em">P</text>
+          </svg>
+          <span style="font-weight:bold; margin-left:8px;">Pinnacle Shield Insurance</span>
+        </div>
+        <div class="col-md-4 mb-4">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a class="footer-link" href="index.html">Home</a></li>
+            <li><a class="footer-link" href="quote.html">Get a Quote</a></li>
+            <li><a class="footer-link" href="about.html">About Us</a></li>
+            <li><a class="footer-link" href="faq.html">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 mb-4">
+          <h5>Contact</h5>
+          <p class="mb-1">📞 1-800-555-SHIELD</p>
+          <p class="mb-1">✉️ info@pinnacleshield.com</p>
+          <p>📍 250 Constitution Plaza, Hartford, CT 06103</p>
+        </div>
+      </div>
+      <hr class="border-secondary" />
+      <p class="text-center mb-0 pb-3">
         &copy; 2026 Pinnacle Shield Insurance. All rights reserved.
       </p>
     </div>

@@ -1,3 +1,94 @@
+/* =========================================
+   QUOTE PAGE ENHANCEMENTS
+========================================= */
+.step-progress {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.step-number {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #4B6E57;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 0.25rem;
+  border: 2px solid #4B6E57;
+  transition: background 0.2s, color 0.2s;
+}
+.step.active .step-number {
+  background: #ffc107;
+  color: #2d3a34;
+  border-color: #ffc107;
+}
+.step-label {
+  font-size: 0.95rem;
+  color: #4B6E57;
+  font-weight: 500;
+}
+.step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 18px;
+  left: 100%;
+  width: 60px;
+  height: 4px;
+  background: #b7d8c7;
+  z-index: 0;
+}
+.insurance-type-cards {
+  margin-bottom: 2rem;
+}
+.insurance-card {
+  background: #f5f9f7;
+  border: 2px solid #b7d8c7;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(75, 110, 87, 0.04);
+  padding: 2rem 1rem 1rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  min-height: 180px;
+  outline: none;
+}
+.insurance-card .insurance-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+.insurance-card:hover,
+.insurance-card:focus {
+  border-color: #4B6E57;
+  background: #eaf4ef;
+  box-shadow: 0 4px 16px rgba(75, 110, 87, 0.10);
+}
+.insurance-card.selected {
+  border-color: #ffc107;
+  background: #fffbe6;
+  box-shadow: 0 4px 16px rgba(255, 193, 7, 0.10);
+}
+.insurance-auto { border-color: #4B6E57; }
+.insurance-home { border-color: #0d6efd; }
+.insurance-life { border-color: #d63384; }
+.insurance-auto.selected { border-color: #ffc107; }
+.insurance-home.selected { border-color: #ffc107; }
+.insurance-life.selected { border-color: #ffc107; }
+@media (max-width: 768px) {
+  .step-progress { gap: 1rem; }
+  .insurance-type-cards .col-md-4 { margin-bottom: 1rem; }
+}
 .products-section .card {
   background: #eaf4ef !important;
   border: 1px solid #b7d8c7;

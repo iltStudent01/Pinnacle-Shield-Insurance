@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const typeRadios = document.querySelectorAll('input[name="insuranceType"]');
   const autoFields = document.getElementById("auto-fields");
   const homeFields = document.getElementById("home-fields");
   const lifeFields = document.getElementById("life-fields");
@@ -11,31 +10,41 @@ document.addEventListener("DOMContentLoaded", function () {
   const resetComparisonBtn = document.getElementById("resetComparisonBtn");
   const quoteForm = document.getElementById("quoteForm");
 
-  let firstQuote = null;
-  let secondQuote = null;
+  // Card-based insurance type selection
+  const insuranceCards = document.querySelectorAll('.insurance-card');
+  let selectedType = null;
 
-  // =========================================
-  // STEP 7: FORM SWITCHING
-  // =========================================
   function hideAllFields() {
     autoFields.classList.add("hidden");
     homeFields.classList.add("hidden");
     lifeFields.classList.add("hidden");
   }
 
-  typeRadios.forEach(function (radio) {
-    radio.addEventListener("change", function () {
+  insuranceCards.forEach(function(card) {
+    card.addEventListener('click', function() {
+      insuranceCards.forEach(c => c.classList.remove('selected'));
+      this.classList.add('selected');
+      selectedType = this.getAttribute('data-type');
+      // Show relevant fields
       hideAllFields();
-
-      if (this.value === "auto") {
+      if (selectedType === "auto") {
         autoFields.classList.remove("hidden");
-      } else if (this.value === "home") {
+      } else if (selectedType === "home") {
         homeFields.classList.remove("hidden");
-      } else if (this.value === "life") {
+      } else if (selectedType === "life") {
         lifeFields.classList.remove("hidden");
       }
     });
+    card.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.click();
+      }
+    });
   });
+
+  // If user submits without selecting, show error (optional: add error UI)
+  // ...existing code...
 
   // =========================================
   // STEP 7: VALIDATION HELPERS
