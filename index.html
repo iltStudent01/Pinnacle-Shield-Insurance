@@ -17,7 +17,14 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-      <a class="navbar-brand" href="index.html">Pinnacle Shield Insurance</a>
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <svg width="40" height="40" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="64" height="64" rx="12" fill="#4B6E57"/>
+          <path d="M32 8L52 16V32C52 44 32 56 32 56C32 56 12 44 12 32V16L32 8Z" fill="#fff" stroke="#4B6E57" stroke-width="2"/>
+          <text x="50%" y="50%" text-anchor="middle" fill="#4B6E57" font-size="20" font-family="Arial" dy=".3em">P</text>
+        </svg>
+        <span style="font-weight:bold; font-size:1.5rem; margin-left:8px;">Pinnacle Shield Insurance</span>
+      </a>
 
       <button
         class="navbar-toggler"
@@ -49,14 +56,14 @@
       </div>
     </div>
   </nav> <!-- Hero Section -->
-  <header class="hero-section text-white py-5">
+  <header class="hero-section text-dark py-5">
     <div class="container text-center py-5">
       <h1 class="display-4 fw-bold">Protect What Matters Most</h1>
       <p class="lead mt-3">
         Get personalized auto, home, and life insurance quotes in minutes.
         Trusted coverage, transparent pricing, no surprises.
       </p>
-      <a href="quote.html" class="btn btn-warning btn-lg mt-4">
+      <a href="quote.html" class="btn get-quote-btn btn-lg mt-4">
         Get Your Free Quote
       </a>
     </div>
@@ -109,81 +116,70 @@
     <!-- Insurance Products -->
     <section class="py-5 bg-light">
       <div class="container">
-        <h2 class="text-center mb-5">Insurance Products</h2>
-
+        <h2 class="text-center mb-5">Our Insurance Products</h2>
         <div class="row g-4">
           <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
+            <div class="card h-100 shadow-sm text-center p-3">
+              <img src="https://cdn.jsdelivr.net/npm/feather-icons/dist/icons/car.svg" alt="Car Insurance" width="48" class="mb-3" />
               <div class="card-body">
-                <h5 class="card-title">Auto Insurance</h5>
-                <p class="card-text">
-                  Coverage for your car, truck, or other vehicles with flexible options.
-                </p>
+                <h5 class="card-title">Car Insurance</h5>
+                <p class="card-text">Comprehensive coverage for your vehicle.</p>
                 <a href="quote.html" class="btn btn-outline-primary">Get Auto Quote</a>
               </div>
             </div>
           </div>
-
           <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
+            <div class="card h-100 shadow-sm text-center p-3">
+              <img src="https://cdn.jsdelivr.net/npm/feather-icons/dist/icons/home.svg" alt="Home Insurance" width="48" class="mb-3" />
               <div class="card-body">
                 <h5 class="card-title">Home Insurance</h5>
-                <p class="card-text">
-                  Protect your home and belongings with comprehensive coverage options.
-                </p>
+                <p class="card-text">Protect your home and belongings.</p>
                 <a href="quote.html" class="btn btn-outline-primary">Get Home Quote</a>
               </div>
             </div>
           </div>
           <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
+            <div class="card h-100 shadow-sm text-center p-3">
+              <img src="https://cdn.jsdelivr.net/npm/feather-icons/dist/icons/heart.svg" alt="Life Insurance" width="48" class="mb-3" />
               <div class="card-body">
                 <h5 class="card-title">Life Insurance</h5>
-                <p class="card-text">
-                  Help Secure your family's financial future with life coverage plans.
-                </p>
+                <p class="card-text">Secure your family's future.</p>
                 <a href="quote.html" class="btn btn-outline-primary">Get Life Quote</a>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </section><!-- Testimonials -->
+    </section>
     <section class="py-5">
       <div class="container">
         <h2 class="text-center mb-5">What Our Customers Say</h2>
-
         <div class="row g-4">
           <div class="col-md-4">
             <div class="card h-100 shadow-sm p-3">
               <p class="fst-italic">
-                “Switching to Pinnacle Shield saved us over $400 a year on car insurance.
-                The quote process was incredibly simple.”
+                "Pinnacle Shield made getting insurance easy and stress-free. Highly recommended!"
               </p>
-              <p class="fw-bold mb-1">— Maria S., Boston, MA</p>
-              <p class="text-warning mb-0">★★★★★</p>
+              <p class="fw-bold mb-1">- Jamie L., Seattle</p>
+              <p class="text-success mb-0">★★★★★</p>
             </div>
           </div>
-
           <div class="col-md-4">
             <div class="card h-100 shadow-sm p-3">
               <p class="fst-italic">
-                “After a tree fell on our roof, Pinnacle Shield handled everything.
-                The claim was processed within a week.”
+                "Excellent customer service and affordable plans. I feel secure with Pinnacle Shield."
               </p>
-              <p class="fw-bold mb-1">— James T., Hartford, CT</p>
-              <p class="text-warning mb-0">★★★★★</p>
+              <p class="fw-bold mb-1">- Priya S., Austin</p>
+              <p class="text-success mb-0">★★★★★</p>
             </div>
           </div>
-
           <div class="col-md-4">
             <div class="card h-100 shadow-sm p-3">
               <p class="fst-italic">
-                “The online quote tool made it easy to compare coverage levels.
-                I found the perfect life insurance plan in minutes.”
+                "The team was responsive and helpful every step of the way. Great experience!"
               </p>
-              <p class="fw-bold mb-1">— Priya K., Austin, TX</p>
-              <p class="text-warning mb-0">★★★★★</p>
+              <p class="fw-bold mb-1">- Alex M., Denver</p>
+              <p class="text-success mb-0">★★★★★</p>
             </div>
           </div>
         </div>
@@ -193,11 +189,14 @@
   <footer class="site-footer text-light pt-4 mt-5">
     <div class="container">
       <div class="row">
-        <div class="col-md-4 mb-4">
-          <h5>Pinnacle Shield Insurance</h5>
-          <p>Protecting families since 1985. Headquartered in Hartford, CT.</p>
+        <div class="col-md-4 mb-4 d-flex align-items-center">
+          <svg width="32" height="32" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="64" height="64" rx="12" fill="#4B6E57"/>
+            <path d="M32 8L52 16V32C52 44 32 56 32 56C32 56 12 44 12 32V16L32 8Z" fill="#fff" stroke="#4B6E57" stroke-width="2"/>
+            <text x="50%" y="50%" text-anchor="middle" fill="#4B6E57" font-size="20" font-family="Arial" dy=".3em">P</text>
+          </svg>
+          <span style="font-weight:bold; margin-left:8px;">Pinnacle Shield Insurance</span>
         </div>
-
         <div class="col-md-4 mb-4">
           <h5>Quick Links</h5>
           <ul class="list-unstyled">
@@ -207,15 +206,13 @@
             <li><a class="footer-link" href="faq.html">FAQ</a></li>
           </ul>
         </div>
-
         <div class="col-md-4 mb-4">
           <h5>Contact</h5>
+          <p class="mb-1">📞 1-800-555-SHIELD</p>
           <p class="mb-1">info@pinnacleshield.com</p>
-          <p class="mb-1">1-800-555-SHIELD</p>
           <p>250 Constitution Plaza, Hartford, CT 06103</p>
         </div>
       </div>
-
       <hr class="border-secondary" />
       <p class="text-center mb-0 pb-3">
         &copy; 2026 Pinnacle Shield Insurance. All rights reserved.

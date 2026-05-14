@@ -41,11 +41,23 @@ a {
    HERO SECTION
 ========================================= */
 .hero-section {
-  background: linear-gradient(90deg, #0d6efd, #0a58ca);
+  background: #f5f9f7;
+  color: #2d3a34;
 }
 
-.hero-section .btn-warning {
+.get-quote-btn {
+  background: #4B6E57;
+  color: #fff;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 6px;
+  font-size: 1.1rem;
   font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.get-quote-btn:hover {
+  background: #35513e;
 }
 
 /* =========================================
