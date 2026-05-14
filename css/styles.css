@@ -2,6 +2,13 @@
 .is-invalid {
   border-color: #dc3545 !important;
   box-shadow: 0 0 0 2px #f8d7da !important;
+  animation: shake 0.18s linear 1;
+}
+@keyframes shake {
+  0% { transform: translateX(0); }
+  30% { transform: translateX(-4px); }
+  60% { transform: translateX(4px); }
+  100% { transform: translateX(0); }
 }
 .invalid-feedback {
   color: #dc3545;
@@ -13,19 +20,59 @@
    QUOTE FORM LAYOUT & BUTTON
 ========================================= */
 .calculate-quote-btn {
-  background: #4B6E57;
+  background: linear-gradient(90deg, #4B6E57 70%, #6fcf97 100%);
   color: #fff;
   border: none;
   border-radius: 2rem;
   font-size: 1.25rem;
   font-weight: bold;
   box-shadow: 0 2px 8px rgba(75, 110, 87, 0.08);
-  transition: background 0.2s, box-shadow 0.2s;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.18s;
 }
 .calculate-quote-btn:hover, .calculate-quote-btn:focus {
-  background: #35513e;
+  background: linear-gradient(90deg, #35513e 70%, #4B6E57 100%);
   color: #fff;
-  box-shadow: 0 4px 16px rgba(75, 110, 87, 0.15);
+  box-shadow: 0 8px 24px rgba(75, 110, 87, 0.18);
+  transform: translateY(-2px) scale(1.04);
+}
+.insurance-card[data-type="auto"]::after {
+  content: "Get a car insurance quote";
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
+  color: #4B6E57;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.insurance-card[data-type="home"]::after {
+  content: "Get a home insurance quote";
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
+  color: #0d6efd;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.insurance-card[data-type="life"]::after {
+  content: "Get a life insurance quote";
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
+  color: #d63384;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.insurance-card:hover::after, .insurance-card:focus::after {
+  opacity: 1;
 }
 
 #quoteForm label {
@@ -98,9 +145,11 @@
   transition: background 0.2s, color 0.2s;
 }
 .step.active .step-number {
-  background: #ffc107;
+  background: linear-gradient(135deg, #ffc107 60%, #ffe066 100%);
   color: #2d3a34;
   border-color: #ffc107;
+  box-shadow: 0 0 0 4px #fffbe6, 0 2px 12px rgba(255,193,7,0.18);
+  transition: box-shadow 0.2s;
 }
 .step-label {
   font-size: 0.95rem;
@@ -145,7 +194,8 @@
 .insurance-card.selected {
   border-color: #ffc107;
   background: #fffbe6;
-  box-shadow: 0 4px 16px rgba(255, 193, 7, 0.10);
+  box-shadow: 0 8px 32px rgba(255, 193, 7, 0.18), 0 2px 8px rgba(75, 110, 87, 0.04);
+  z-index: 2;
 }
 .insurance-auto { border-color: #4B6E57; }
 .insurance-home { border-color: #0d6efd; }
@@ -155,7 +205,11 @@
 .insurance-life.selected { border-color: #ffc107; }
 @media (max-width: 768px) {
   .step-progress { gap: 1rem; }
-  .insurance-type-cards .col-md-4 { margin-bottom: 1rem; }
+    .insurance-type-cards .col-md-4, .insurance-type-cards .col-4 { margin-bottom: 1rem; }
+    .insurance-card {
+      min-height: 140px;
+      padding: 1.2rem 0.5rem 0.5rem 0.5rem;
+    }
 }
 .products-section .card {
   background: #eaf4ef !important;
@@ -345,4 +399,37 @@ a {
   .hero-section .lead {
     font-size: 1rem;
   }
+}
+
+#resultsSection.showing {
+  animation: popFadeIn 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+#resultsSection .quote-success-check {
+  animation: checkPop 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+#resultsSection .quote-success-check span {
+  display: inline-block;
+  background: linear-gradient(90deg, #4B6E57 70%, #6fcf97 100%);
+  border-radius: 50%;
+  color: #fff;
+  width: 54px;
+  height: 54px;
+  line-height: 54px;
+  font-size: 2.2rem;
+  box-shadow: 0 2px 12px rgba(75,110,87,0.12);
+  margin-bottom: 0.5rem;
+}
+
+@keyframes popFadeIn {
+  0% { opacity: 0; transform: scale(0.92) translateY(16px); }
+  60% { opacity: 1; transform: scale(1.04) translateY(-4px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes checkPop {
+  0% { opacity: 0; transform: scale(0.7); }
+  70% { opacity: 1; transform: scale(1.15); }
+  100% { opacity: 1; transform: scale(1); }
 }

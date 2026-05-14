@@ -1,85 +1,74 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const autoFields = document.getElementById("auto-fields");
-  const homeFields = document.getElementById("home-fields");
-  const lifeFields = document.getElementById("life-fields");
-  const calculateBtn = document.getElementById("calculateQuoteBtn");
-  const resultsSection = document.getElementById("resultsSection");
-  const anotherQuoteBtn = document.getElementById("anotherQuoteBtn");
-  const compareQuoteBtn = document.getElementById("compareQuoteBtn");
-  const comparisonSection = document.getElementById("comparisonSection");
-  const resetComparisonBtn = document.getElementById("resetComparisonBtn");
-  const quoteForm = document.getElementById("quoteForm");
 
-
-  // Card-based insurance type selection
+  // --- Step 1: Stepper and Card Selection Logic ---
   const insuranceCards = document.querySelectorAll('.insurance-card');
-  let selectedType = null;
-  const step2Heading = document.getElementById('step2-heading');
-
   const detailsSection = document.getElementById('details-section');
+  const autoFields = document.getElementById('auto-fields');
+  const homeFields = document.getElementById('home-fields');
+  const lifeFields = document.getElementById('life-fields');
   const calculateSection = document.getElementById('calculate-section');
-  function hideAllFields() {
-    autoFields.classList.add("hidden");
-    homeFields.classList.add("hidden");
-    lifeFields.classList.add("hidden");
-    detailsSection.classList.add("hidden");
-    calculateSection.classList.add("hidden");
-  }
+  let calculateBtn = null;
+  const resultsSection = document.getElementById('resultsSection');
+  const quoteForm = document.getElementById('quoteForm');
+  let selectedType = null;
 
-  function updateStep2Heading(type) {
-    if (!type) {
-      step2Heading.textContent = 'Step 2: Insurance Details';
-    } else if (type === 'auto') {
-      step2Heading.textContent = 'Step 2: Auto Insurance Details';
-    } else if (type === 'home') {
-      step2Heading.textContent = 'Step 2: Home Insurance Details';
-    } else if (type === 'life') {
-      step2Heading.textContent = 'Step 2: Life Insurance Details';
-    }
-  }
+  // Stepper elements
+  const steps = document.querySelectorAll('.step');
 
-  insuranceCards.forEach(function(card) {
-    card.addEventListener('click', function() {
-      insuranceCards.forEach(c => c.classList.remove('selected'));
-      this.classList.add('selected');
-      selectedType = this.getAttribute('data-type');
-      // Show relevant fields
-      hideAllFields();
-      detailsSection.classList.remove("hidden");
-      calculateSection.classList.remove("hidden");
-      updateStep2Heading(selectedType);
-      if (selectedType === "auto") {
-        autoFields.classList.remove("hidden");
-      } else if (selectedType === "home") {
-        homeFields.classList.remove("hidden");
-      } else if (selectedType === "life") {
-        lifeFields.classList.remove("hidden");
-      }
+  function updateStepper(currentStep) {
+    steps.forEach((step, idx) => {
+      step.classList.remove('active', 'completed');
+      if (idx < currentStep) step.classList.add('completed');
+      else if (idx === currentStep) step.classList.add('active');
     });
-    card.addEventListener('keydown', function(e) {
+  }
+
+  function hideAllFields() {
+    autoFields.classList.add('hidden');
+    homeFields.classList.add('hidden');
+    lifeFields.classList.add('hidden');
+    detailsSection.classList.add('hidden');
+    calculateSection.classList.add('hidden');
+  }
+
+  insuranceCards.forEach(card => {
+    card.addEventListener('click', function () {
+      // Remove selection from all cards
+      insuranceCards.forEach(c => c.classList.remove('selected'));
+      // Mark this card as selected
+      card.classList.add('selected');
+      selectedType = card.getAttribute('data-type');
+      // Set the corresponding hidden radio input
+      if (selectedType === 'auto') document.getElementById('insuranceTypeAuto').checked = true;
+      if (selectedType === 'home') document.getElementById('insuranceTypeHome').checked = true;
+      if (selectedType === 'life') document.getElementById('insuranceTypeLife').checked = true;
+      // Show details section and correct fields
+      detailsSection.classList.remove('hidden');
+      autoFields.classList.add('hidden');
+      homeFields.classList.add('hidden');
+      lifeFields.classList.add('hidden');
+      if (selectedType === 'auto') autoFields.classList.remove('hidden');
+      if (selectedType === 'home') homeFields.classList.remove('hidden');
+      if (selectedType === 'life') lifeFields.classList.remove('hidden');
+      // Show calculate button section
+      calculateSection.classList.remove('hidden');
+      // Update stepper to step 2
+      updateStepper(1);
+      // Scroll to details section for better UX
+      detailsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    // Keyboard accessibility
+    card.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        this.click();
+        card.click();
       }
     });
   });
 
-  // On page load, hide details and calculate sections
+  // Hide all fields and set stepper to step 1 on load
   hideAllFields();
-
-  // --- Validation ---
-  function showAlert(message) {
-    // Remove any existing alert
-    let oldAlert = document.getElementById('quote-alert');
-    if (oldAlert) oldAlert.remove();
-    // Create new alert
-    const alert = document.createElement('div');
-    alert.className = 'alert alert-danger text-center';
-    alert.id = 'quote-alert';
-    alert.textContent = message;
-    quoteForm.prepend(alert);
-    setTimeout(() => { if (alert) alert.remove(); }, 4000);
-  }
+  updateStepper(0);
 
   function clearFieldErrors(formSection) {
     const invalids = formSection.querySelectorAll('.is-invalid');
@@ -97,89 +86,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  calculateBtn.addEventListener('click', function(e) {
-    // Remove previous alert
-    let oldAlert = document.getElementById('quote-alert');
-    if (oldAlert) oldAlert.remove();
-    // Validate insurance type
-    if (!selectedType) {
-      showAlert('Please select an insurance type.');
-      return;
-    }
-    // Validate fields for selected type
-    let valid = true;
-    let section = null;
-    if (selectedType === 'auto') section = autoFields;
-    if (selectedType === 'home') section = homeFields;
-    if (selectedType === 'life') section = lifeFields;
-    clearFieldErrors(section);
-    // Validate required fields
-    if (selectedType === 'auto') {
-      const name = section.querySelector('#autoName');
-      if (!name.value || name.value.trim().length < 2) { setFieldError(name, 'Please enter at least 2 characters for your full name.'); valid = false; }
-      const age = section.querySelector('#autoAge');
-      if (!age.value || +age.value < 16 || +age.value > 100) { setFieldError(age, 'Please enter a valid age between 16 and 100.'); valid = false; }
-      const zip = section.querySelector('#autoZip');
-      if (!zip.value || !/^\d{5}$/.test(zip.value)) { setFieldError(zip, 'ZIP code must be exactly 5 digits.'); valid = false; }
-      const year = section.querySelector('#vehicleYear');
-      if (!year.value || +year.value < 1990 || +year.value > 2026) { setFieldError(year, 'Vehicle year must be between 1990 and 2026.'); valid = false; }
-      const make = section.querySelector('#vehicleMake');
-      if (!make.value) { setFieldError(make, 'Please select a vehicle make.'); valid = false; }
-      const model = section.querySelector('#vehicleModel');
-      if (!model.value || model.value.trim().length < 2) { setFieldError(model, 'Please enter at least 2 characters for the vehicle model.'); valid = false; }
-      const mileage = section.querySelector('#annualMileage');
-      if (!mileage.value) { setFieldError(mileage, 'Please select annual mileage.'); valid = false; }
-      const record = section.querySelector('#drivingRecord');
-      if (!record.value) { setFieldError(record, 'Please select your driving record.'); valid = false; }
-      const coverage = section.querySelector('input[name="autoCoverage"]:checked');
-      if (!coverage) { document.getElementById('autoCoverageError').textContent = 'Please select a coverage level.'; valid = false; }
-      else { document.getElementById('autoCoverageError').textContent = ''; }
-    }
-    if (selectedType === 'home') {
-      const name = section.querySelector('#homeName');
-      if (!name.value || name.value.trim().length < 2) { setFieldError(name, 'Please enter at least 2 characters for your full name.'); valid = false; }
-      const age = section.querySelector('#homeAge');
-      if (!age.value || +age.value < 18 || +age.value > 100) { setFieldError(age, 'Please enter a valid age between 18 and 100.'); valid = false; }
-      const zip = section.querySelector('#homeZip');
-      if (!zip.value || !/^\d{5}$/.test(zip.value)) { setFieldError(zip, 'ZIP code must be exactly 5 digits.'); valid = false; }
-      const value = section.querySelector('#homeValue');
-      if (!value.value || +value.value < 50000) { setFieldError(value, 'Home value must be at least $50,000.'); valid = false; }
-      const year = section.querySelector('#yearBuilt');
-      if (!year.value || +year.value < 1900 || +year.value > 2026) { setFieldError(year, 'Year built must be between 1900 and 2026.'); valid = false; }
-      const sqft = section.querySelector('#squareFootage');
-      if (!sqft.value || +sqft.value < 500 || +sqft.value > 10000) { setFieldError(sqft, 'Square footage must be between 500 and 10,000.'); valid = false; }
-      const constr = section.querySelector('#constructionType');
-      if (!constr.value) { setFieldError(constr, 'Please select a construction type.'); valid = false; }
-      const coverage = section.querySelector('input[name="homeCoverage"]:checked');
-      if (!coverage) { document.getElementById('homeCoverageError').textContent = 'Please select a coverage level.'; valid = false; }
-      else { document.getElementById('homeCoverageError').textContent = ''; }
-    }
-    if (selectedType === 'life') {
-      const name = section.querySelector('#lifeName');
-      if (!name.value || name.value.trim().length < 2) { setFieldError(name, 'Please enter at least 2 characters for your full name.'); valid = false; }
-      const age = section.querySelector('#lifeAge');
-      if (!age.value || +age.value < 18 || +age.value > 85) { setFieldError(age, 'Please enter a valid age between 18 and 85.'); valid = false; }
-      const zip = section.querySelector('#lifeZip');
-      if (!zip.value || !/^\d{5}$/.test(zip.value)) { setFieldError(zip, 'ZIP code must be exactly 5 digits.'); valid = false; }
-      const gender = section.querySelector('#gender');
-      if (!gender.value) { setFieldError(gender, 'Please select your gender.'); valid = false; }
-      const smoker = section.querySelector('input[name="smoker"]:checked');
-      if (!smoker) { document.getElementById('smokerError').textContent = 'Please select smoker status.'; valid = false; }
-      else { document.getElementById('smokerError').textContent = ''; }
-      const amount = section.querySelector('#coverageAmount');
-      if (!amount.value) { setFieldError(amount, 'Please select a coverage amount.'); valid = false; }
-      const exercise = section.querySelector('#exerciseFrequency');
-      if (!exercise.value) { setFieldError(exercise, 'Please select your exercise frequency.'); valid = false; }
-      const coverage = section.querySelector('input[name="lifeCoverage"]:checked');
-      if (!coverage) { document.getElementById('lifeCoverageError').textContent = 'Please select a coverage level.'; valid = false; }
-      else { document.getElementById('lifeCoverageError').textContent = ''; }
-    }
-    if (!valid) return;
-    // If valid, continue with quote calculation (existing logic)
-  });
 
-  // If user submits without selecting, show error (optional: add error UI)
-  // ...existing code...
+  // --- END Step 1 logic ---
+
+
 
   // =========================================
   // STEP 7: VALIDATION HELPERS
@@ -199,12 +109,113 @@ document.addEventListener("DOMContentLoaded", function () {
   function showError(input, message) {
     if (input) {
       input.classList.add("is-invalid");
-      const feedback = input.nextElementSibling;
-      if (feedback && feedback.classList.contains("invalid-feedback")) {
+      const feedback = input.parentElement.querySelector('.invalid-feedback');
+      if (feedback) {
         feedback.textContent = message;
+        feedback.style.display = 'block';
       }
     }
   }
+
+    // Add real-time validation on blur for all form controls
+    function addRealtimeValidation() {
+      const allInputs = document.querySelectorAll('#quoteForm input, #quoteForm select');
+      allInputs.forEach(input => {
+        input.addEventListener('blur', function () {
+          // Only validate visible fields
+          if (input.offsetParent === null) return;
+          // Remove previous error
+          input.classList.remove('is-invalid');
+          const feedback = input.parentElement.querySelector('.invalid-feedback');
+          if (feedback) feedback.style.display = 'none';
+          // Validate based on field
+          const id = input.id;
+          if (id.endsWith('Name')) {
+            if (input.value.trim().length === 0) {
+              showError(input, 'This field is required.');
+            } else if (input.value.trim().length < 2) {
+              showError(input, 'Please enter your full name (at least 2 characters).');
+            }
+              const val = input.value.trim();
+              if (val.length === 0) {
+                showError(input, 'This field is required.');
+              } else if (val.length < 2) {
+                showError(input, 'Please enter your full name (at least 2 characters).');
+              } else if (/\d/.test(val)) {
+                showError(input, 'Name cannot contain numbers.');
+              }
+          }
+          if (id.endsWith('Age')) {
+            let min = 0, max = 120;
+            if (id.startsWith('auto')) { min = 16; max = 100; }
+            else if (id.startsWith('home')) { min = 18; max = 100; }
+            else if (id.startsWith('life')) { min = 18; max = 85; }
+            if (input.value === '') {
+              showError(input, 'This field is required.');
+            } else if (input.value < min || input.value > max) {
+              showError(input, `Please enter your age (${min}-${max}).`);
+            }
+              else if (!/^\d+$/.test(input.value) || parseInt(input.value) < min || parseInt(input.value) > max) {
+                showError(input, `Please enter your age (${min}-${max}), positive integer only.`);
+              }
+          }
+          if (id.endsWith('Zip')) {
+            if (input.value === '') {
+              showError(input, 'This field is required.');
+            } else if (!/^\d{5}$/.test(input.value)) {
+              showError(input, 'ZIP code must be exactly 5 digits.');
+            }
+          }
+          if (id === 'vehicleYear') {
+            if (input.value === '') {
+              showError(input, 'This field is required.');
+            } else if (input.value < 1990 || input.value > 2026) {
+              showError(input, 'Vehicle year must be between 1990 and 2026.');
+            }
+              else if (!/^\d+$/.test(input.value) || input.value < 1990 || input.value > 2026) {
+                showError(input, 'Vehicle year must be between 1990 and 2026.');
+              }
+          }
+          if (id === 'homeValue') {
+            if (input.value === '') {
+              showError(input, 'This field is required.');
+            } else if (input.value < 50000) {
+              showError(input, 'Home value must be at least $50,000.');
+            }
+              else if (!/^\d+$/.test(input.value) || input.value < 50000) {
+                showError(input, 'Home value must be at least $50,000.');
+              }
+          }
+          if (id === 'yearBuilt') {
+            if (input.value === '') {
+              showError(input, 'This field is required.');
+            } else if (input.value < 1900 || input.value > 2026) {
+              showError(input, 'Year built must be between 1900 and 2026.');
+            }
+              else if (!/^\d+$/.test(input.value) || input.value < 1900 || input.value > 2026) {
+                showError(input, 'Year built must be a positive integer between 1900 and 2026.');
+              }
+          }
+          if (id === 'squareFootage') {
+            if (input.value === '') {
+              showError(input, 'This field is required.');
+            } else if (input.value < 500 || input.value > 10000) {
+              showError(input, 'Square footage must be between 500 and 10,000.');
+            }
+              else if (!/^\d+$/.test(input.value) || input.value < 500 || input.value > 10000) {
+                showError(input, 'Square footage must be a positive integer between 500 and 10,000.');
+              }
+          }
+          if (id === 'vehicleModel') {
+            if (input.value.trim().length === 0) {
+              showError(input, 'This field is required.');
+            } else if (input.value.trim().length < 2) {
+              showError(input, 'Please enter the vehicle model (at least 2 characters).');
+            }
+          }
+        });
+      });
+    }
 
   function showCustomError(errorId, message) {
     const errorEl = document.getElementById(errorId);
@@ -239,6 +250,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let isValid = true;
 
+    let firstInvalid = null;
+    let errorSummary = [];
+
     // AUTO VALIDATION
     if (insuranceType === "auto") {
       const name = document.getElementById("autoName");
@@ -250,37 +264,106 @@ document.addEventListener("DOMContentLoaded", function () {
       const mileage = document.getElementById("annualMileage");
       const coverage = getSelectedRadioValue("autoCoverage");
 
-      if (name.value.trim().length < 2) {
-        showError(name, "Please enter at least 2 characters for your full name.");
+      if (name.value.trim().length === 0) {
+        showError(name, "This field is required.");
         isValid = false;
-      }
-      if (age.value === "" || age.value < 16 || age.value > 100) {
-        showError(age, "Please enter a valid age between 16 and 100.");
+        errorSummary.push('Full Name is required.');
+        if (!firstInvalid) firstInvalid = name;
+      } else if (name.value.trim().length < 2) {
+        showError(name, "Please enter your full name (at least 2 characters).");
         isValid = false;
+        errorSummary.push('Full Name must be at least 2 characters.');
+        if (!firstInvalid) firstInvalid = name;
       }
-      if (!validateZip(zip.value)) {
+        const nameVal = name.value.trim();
+        if (nameVal.length === 0) {
+          showError(name, "This field is required.");
+          isValid = false;
+          errorSummary.push('Full Name is required.');
+          if (!firstInvalid) firstInvalid = name;
+        } else if (nameVal.length < 2) {
+          showError(name, "Please enter your full name (at least 2 characters).");
+          isValid = false;
+          errorSummary.push('Full Name must be at least 2 characters.');
+          if (!firstInvalid) firstInvalid = name;
+        } else if (/\d/.test(nameVal)) {
+          showError(name, "Name cannot contain numbers.");
+          isValid = false;
+          errorSummary.push('Name cannot contain numbers.');
+          if (!firstInvalid) firstInvalid = name;
+        }
+      if (age.value === "") {
+        showError(age, "This field is required.");
+        isValid = false;
+        errorSummary.push('Age is required.');
+        if (!firstInvalid) firstInvalid = age;
+      } else if (age.value < 16 || age.value > 100) {
+        showError(age, "Please enter your age (16-100).");
+        isValid = false;
+        errorSummary.push('Age must be between 16 and 100.');
+        if (!firstInvalid) firstInvalid = age;
+      }
+        else if (!/^\d+$/.test(age.value) || age.value < 16 || age.value > 100) {
+          showError(age, "Please enter your age (16-100), positive integer only.");
+          isValid = false;
+          errorSummary.push('Age must be a positive integer between 16 and 100.');
+          if (!firstInvalid) firstInvalid = age;
+        }
+      if (zip.value === "") {
+        showError(zip, "This field is required.");
+        isValid = false;
+        errorSummary.push('ZIP Code is required.');
+        if (!firstInvalid) firstInvalid = zip;
+      } else if (!validateZip(zip.value)) {
         showError(zip, "ZIP code must be exactly 5 digits.");
         isValid = false;
+        errorSummary.push('ZIP code must be exactly 5 digits.');
+        if (!firstInvalid) firstInvalid = zip;
       }
-      if (year.value === "" || year.value < 1990 || year.value > 2026) {
+      if (year.value === "") {
+        showError(year, "This field is required.");
+        isValid = false;
+        errorSummary.push('Vehicle Year is required.');
+        if (!firstInvalid) firstInvalid = year;
+      } else if (year.value < 1990 || year.value > 2026) {
         showError(year, "Vehicle year must be between 1990 and 2026.");
         isValid = false;
+        errorSummary.push('Vehicle year must be between 1990 and 2026.');
+        if (!firstInvalid) firstInvalid = year;
       }
       if (make.value === "") {
         showError(make, "Please select a vehicle make.");
         isValid = false;
+        errorSummary.push('Vehicle Make is required.');
+        if (!firstInvalid) firstInvalid = make;
       }
-      if (model.value.trim().length < 2) {
-        showError(model, "Please enter at least 2 characters for the vehicle model.");
+      const modelVal = model.value.trim();
+      if (modelVal.length === 0) {
+        showError(model, "This field is required.");
         isValid = false;
+        errorSummary.push('Vehicle Model is required.');
+        if (!firstInvalid) firstInvalid = model;
+      } else if (modelVal.length < 2) {
+        showError(model, "Please enter the vehicle model (at least 2 characters).");
+        isValid = false;
+        errorSummary.push('Vehicle Model must be at least 2 characters.');
+        if (!firstInvalid) firstInvalid = model;
+      } else if (!/[a-zA-Z]/.test(modelVal)) {
+        showError(model, "Model must contain at least one letter.");
+        isValid = false;
+        errorSummary.push('Model must contain at least one letter.');
+        if (!firstInvalid) firstInvalid = model;
       }
       if (mileage.value === "") {
         showError(mileage, "Please select annual mileage.");
         isValid = false;
+        errorSummary.push('Annual Mileage is required.');
+        if (!firstInvalid) firstInvalid = mileage;
       }
       if (!coverage) {
         showCustomError("autoCoverageError", "Please select Auto coverage level.");
         isValid = false;
+        errorSummary.push('Auto Coverage Level is required.');
       }
     }
 
@@ -295,37 +378,106 @@ document.addEventListener("DOMContentLoaded", function () {
       const construction = document.getElementById("constructionType");
       const coverage = getSelectedRadioValue("homeCoverage");
 
-      if (name.value.trim().length < 2) {
-        showError(name, "Please enter at least 2 characters for your full name.");
+      if (name.value.trim().length === 0) {
+        showError(name, "This field is required.");
         isValid = false;
-      }
-      if (age.value === "" || age.value < 18 || age.value > 100) {
-        showError(age, "Please enter a valid age between 18 and 100.");
+        errorSummary.push('Full Name is required.');
+        if (!firstInvalid) firstInvalid = name;
+      } else if (name.value.trim().length < 2) {
+        showError(name, "Please enter your full name (at least 2 characters).");
         isValid = false;
+        errorSummary.push('Full Name must be at least 2 characters.');
+        if (!firstInvalid) firstInvalid = name;
       }
-      if (!validateZip(zip.value)) {
+      if (age.value === "") {
+        showError(age, "This field is required.");
+        isValid = false;
+        errorSummary.push('Age is required.');
+        if (!firstInvalid) firstInvalid = age;
+      } else if (age.value < 18 || age.value > 100) {
+        showError(age, "Please enter your age (18-100).");
+        isValid = false;
+        errorSummary.push('Age must be between 18 and 100.');
+        if (!firstInvalid) firstInvalid = age;
+      }
+        else if (!/^\d+$/.test(age.value) || age.value < 18 || age.value > 100) {
+          showError(age, "Please enter your age (18-100), positive integer only.");
+          isValid = false;
+          errorSummary.push('Age must be a positive integer between 18 and 100.');
+          if (!firstInvalid) firstInvalid = age;
+        }
+      if (zip.value === "") {
+        showError(zip, "This field is required.");
+        isValid = false;
+        errorSummary.push('ZIP Code is required.');
+        if (!firstInvalid) firstInvalid = zip;
+      } else if (!validateZip(zip.value)) {
         showError(zip, "ZIP code must be exactly 5 digits.");
         isValid = false;
+        errorSummary.push('ZIP code must be exactly 5 digits.');
+        if (!firstInvalid) firstInvalid = zip;
       }
-      if (value.value === "" || value.value < 50000) {
+      if (value.value === "") {
+        showError(value, "This field is required.");
+        isValid = false;
+        errorSummary.push('Home Value is required.');
+        if (!firstInvalid) firstInvalid = value;
+      } else if (value.value < 50000) {
         showError(value, "Home value must be at least $50,000.");
         isValid = false;
+        errorSummary.push('Home value must be at least $50,000.');
+        if (!firstInvalid) firstInvalid = value;
       }
-      if (yearBuilt.value === "" || yearBuilt.value < 1900 || yearBuilt.value > 2026) {
+        else if (!/^\d+$/.test(value.value) || value.value < 50000) {
+          showError(value, "Home value must be at least $50,000.");
+          isValid = false;
+          errorSummary.push('Home value must be a positive integer at least $50,000.');
+          if (!firstInvalid) firstInvalid = value;
+        }
+      if (yearBuilt.value === "") {
+        showError(yearBuilt, "This field is required.");
+        isValid = false;
+        errorSummary.push('Year Built is required.');
+        if (!firstInvalid) firstInvalid = yearBuilt;
+      } else if (yearBuilt.value < 1900 || yearBuilt.value > 2026) {
         showError(yearBuilt, "Year built must be between 1900 and 2026.");
         isValid = false;
+        errorSummary.push('Year built must be between 1900 and 2026.');
+        if (!firstInvalid) firstInvalid = yearBuilt;
       }
-      if (sqft.value === "" || sqft.value < 500 || sqft.value > 10000) {
+        else if (!/^\d+$/.test(yearBuilt.value) || yearBuilt.value < 1900 || yearBuilt.value > 2026) {
+          showError(yearBuilt, "Year built must be a positive integer between 1900 and 2026.");
+          isValid = false;
+          errorSummary.push('Year built must be a positive integer between 1900 and 2026.');
+          if (!firstInvalid) firstInvalid = yearBuilt;
+        }
+      if (sqft.value === "") {
+        showError(sqft, "This field is required.");
+        isValid = false;
+        errorSummary.push('Square Footage is required.');
+        if (!firstInvalid) firstInvalid = sqft;
+      } else if (sqft.value < 500 || sqft.value > 10000) {
         showError(sqft, "Square footage must be between 500 and 10,000.");
         isValid = false;
+        errorSummary.push('Square footage must be between 500 and 10,000.');
+        if (!firstInvalid) firstInvalid = sqft;
       }
+        else if (!/^\d+$/.test(sqft.value) || sqft.value < 500 || sqft.value > 10000) {
+          showError(sqft, "Square footage must be a positive integer between 500 and 10,000.");
+          isValid = false;
+          errorSummary.push('Square footage must be a positive integer between 500 and 10,000.');
+          if (!firstInvalid) firstInvalid = sqft;
+        }
       if (construction.value === "") {
         showError(construction, "Please select a construction type.");
         isValid = false;
+        errorSummary.push('Construction Type is required.');
+        if (!firstInvalid) firstInvalid = construction;
       }
       if (!coverage) {
         showCustomError("homeCoverageError", "Please select Home coverage level.");
         isValid = false;
+        errorSummary.push('Home Coverage Level is required.');
       }
     }
 
@@ -340,40 +492,84 @@ document.addEventListener("DOMContentLoaded", function () {
       const exercise = document.getElementById("exerciseFrequency");
       const coverage = getSelectedRadioValue("lifeCoverage");
 
-      if (name.value.trim().length < 2) {
-        showError(name, "Please enter at least 2 characters for your full name.");
+      if (name.value.trim().length === 0) {
+        showError(name, "This field is required.");
         isValid = false;
-      }
-      if (age.value === "" || age.value < 18 || age.value > 85) {
-        showError(age, "Please enter a valid age between 18 and 85.");
+        errorSummary.push('Full Name is required.');
+        if (!firstInvalid) firstInvalid = name;
+      } else if (name.value.trim().length < 2) {
+        showError(name, "Please enter your full name (at least 2 characters).");
         isValid = false;
+        errorSummary.push('Full Name must be at least 2 characters.');
+        if (!firstInvalid) firstInvalid = name;
       }
-      if (!validateZip(zip.value)) {
+      if (age.value === "") {
+        showError(age, "This field is required.");
+        isValid = false;
+        errorSummary.push('Age is required.');
+        if (!firstInvalid) firstInvalid = age;
+      } else if (age.value < 18 || age.value > 85) {
+        showError(age, "Please enter your age (18-85).");
+        isValid = false;
+        errorSummary.push('Age must be between 18 and 85.');
+        if (!firstInvalid) firstInvalid = age;
+      }
+      if (zip.value === "") {
+        showError(zip, "This field is required.");
+        isValid = false;
+        errorSummary.push('ZIP Code is required.');
+        if (!firstInvalid) firstInvalid = zip;
+      } else if (!validateZip(zip.value)) {
         showError(zip, "ZIP code must be exactly 5 digits.");
         isValid = false;
+        errorSummary.push('ZIP code must be exactly 5 digits.');
+        if (!firstInvalid) firstInvalid = zip;
       }
       if (gender.value === "") {
         showError(gender, "Please select your gender.");
         isValid = false;
+        errorSummary.push('Gender is required.');
+        if (!firstInvalid) firstInvalid = gender;
       }
       if (!smoker) {
         showCustomError("smokerError", "Please select smoker Yes or No.");
         isValid = false;
+        errorSummary.push('Smoker selection is required.');
       }
       if (amount.value === "") {
         showError(amount, "Please select a coverage amount.");
         isValid = false;
+        errorSummary.push('Coverage Amount is required.');
+        if (!firstInvalid) firstInvalid = amount;
       }
       if (exercise.value === "") {
         showError(exercise, "Please select your exercise frequency.");
         isValid = false;
+        errorSummary.push('Exercise Frequency is required.');
+        if (!firstInvalid) firstInvalid = exercise;
       }
       if (!coverage) {
         showCustomError("lifeCoverageError", "Please select Life coverage level.");
         isValid = false;
+        errorSummary.push('Life Coverage Level is required.');
       }
     }
 
+    // Show error summary if any
+    const summaryDiv = document.getElementById('formErrorSummary');
+    if (summaryDiv) {
+      if (!isValid && errorSummary.length > 0) {
+        summaryDiv.innerHTML = '<ul class="mb-0"><li>' + errorSummary.join('</li><li>') + '</li></ul>';
+        summaryDiv.classList.remove('d-none');
+      } else {
+        summaryDiv.innerHTML = '';
+        summaryDiv.classList.add('d-none');
+      }
+    }
+    // Focus first invalid field
+    if (!isValid && firstInvalid) {
+      firstInvalid.focus();
+    }
     return isValid;
   }
 
@@ -494,128 +690,191 @@ document.addEventListener("DOMContentLoaded", function () {
   // =========================================
   // STEP 9: DISPLAY RESULTS
   // =========================================
-  function showResults(type, premium) {
-    const quoteName = document.getElementById("quoteName");
-    const quoteType = document.getElementById("quoteType");
-    const monthlyPremium = document.getElementById("monthlyPremium");
-    const annualPremium = document.getElementById("annualPremium");
-    const breakdownBody = document.getElementById("breakdownBody");
+    function showResults(type, premium) {
+      const quoteName = document.getElementById("quoteName");
+      const quoteType = document.getElementById("quoteType");
+      const monthlyPremium = document.getElementById("monthlyPremium");
+      const annualPremium = document.getElementById("annualPremium");
+      const breakdownBody = document.getElementById("breakdownBody");
+      const quoteSummary = document.getElementById("quoteSummary");
+      const cardBody = resultsSection.querySelector('.card-body');
+      let check = cardBody.querySelector('.quote-success-check');
+      if (!check) {
+        check = document.createElement('div');
+        check.className = 'quote-success-check mb-2';
+        cardBody.insertBefore(check, cardBody.firstChild);
+      }
+      check.innerHTML = '<span style="font-size:2.5rem;color:#4B6E57;">&#10003;</span>';
+      check.style.display = 'block';
 
-    let name = "";
+      let name = "";
+      if (type === "auto") {
+        name = document.getElementById("autoName").value;
+      } else if (type === "home") {
+        name = document.getElementById("homeName").value;
+      } else if (type === "life") {
+        name = document.getElementById("lifeName").value;
+      }
 
-    if (type === "auto") {
-      name = document.getElementById("autoName").value;
-    } else if (type === "home") {
-      name = document.getElementById("homeName").value;
-    } else if (type === "life") {
-      name = document.getElementById("lifeName").value;
+      const quoteData = {
+        name: name,
+        type: type === "auto" ? "Auto Insurance" : type === "home" ? "Home Insurance" : "Life Insurance",
+        monthly: premium,
+        annual: premium * 12,
+        date: new Date().toLocaleDateString(),
+        time: new Date().toLocaleTimeString()
+      };
+
+      // Animate results section
+      resultsSection.classList.remove("hidden");
+      resultsSection.classList.add("showing");
+      setTimeout(() => resultsSection.classList.remove("showing"), 600);
+
+      quoteName.textContent = quoteData.name;
+      quoteType.textContent = quoteData.type;
+      monthlyPremium.textContent = formatCurrency(quoteData.monthly);
+      annualPremium.textContent = formatCurrency(quoteData.annual);
+
+      // Add summary
+      if (quoteSummary) {
+        quoteSummary.textContent = `Success! Your personalized ${quoteData.type} quote is ready.`;
+      }
+
+      breakdownBody.innerHTML = "";
+
+      if (type === "auto") {
+        addBreakdownRow(breakdownBody, "Age", document.getElementById("autoAge").value, "Young/older driver adjustment");
+        addBreakdownRow(breakdownBody, "Vehicle Year", document.getElementById("vehicleYear").value, "Vehicle age adjustment");
+        addBreakdownRow(breakdownBody, "Mileage", document.getElementById("annualMileage").value, "Mileage adjustment");
+        addBreakdownRow(breakdownBody, "Coverage Level", getSelectedRadioValue("autoCoverage"), "Coverage multiplier");
+      }
+
+      if (type === "home") {
+        addBreakdownRow(breakdownBody, "Home Value", document.getElementById("homeValue").value, "Base premium based on home value");
+        addBreakdownRow(breakdownBody, "Year Built", document.getElementById("yearBuilt").value, "Age of home adjustment");
+        addBreakdownRow(breakdownBody, "Square Footage", document.getElementById("squareFootage").value, "Size adjustment");
+        addBreakdownRow(breakdownBody, "Coverage Level", getSelectedRadioValue("homeCoverage"), "Coverage multiplier");
+      }
+
+      if (type === "life") {
+        addBreakdownRow(breakdownBody, "Age", document.getElementById("lifeAge").value, "Age-based risk adjustment");
+        addBreakdownRow(breakdownBody, "Coverage Amount", document.getElementById("coverageAmount").value, "Policy size adjustment");
+        addBreakdownRow(breakdownBody, "Smoker", document.querySelector('input[name="smoker"]:checked').value, "Health risk adjustment");
+        addBreakdownRow(breakdownBody, "Exercise Frequency", document.getElementById("exerciseFrequency").value, "Lifestyle adjustment");
+      }
+
+      // Store latest quote for saving
+      window.latestQuote = quoteData;
+      secondQuote = quoteData;
     }
 
-    const quoteData = {
-      name: name,
-      type: type === "auto" ? "Auto Insurance" : type === "home" ? "Home Insurance" : "Life Insurance",
-      monthly: premium,
-      annual: premium * 12
-    };
 
-    quoteName.textContent = quoteData.name;
-    quoteType.textContent = quoteData.type;
-    monthlyPremium.textContent = formatCurrency(quoteData.monthly);
-    annualPremium.textContent = formatCurrency(quoteData.annual);
+  // Calculate quote button (re-bind on DOMContentLoaded and after insurance type selection)
+  function bindCalculateBtn() {
+    calculateBtn = document.getElementById('calculateQuoteBtn');
+    if (calculateBtn) {
+      calculateBtn.onclick = function () {
+        // Use selectedType from card selection
+        if (!selectedType) {
+          alert("Please select an insurance type.");
+          return;
+        }
+        // Validate form for the selected type
+        if (!validateForm()) return;
 
-    breakdownBody.innerHTML = "";
-
-    if (type === "auto") {
-      addBreakdownRow(breakdownBody, "Age", document.getElementById("autoAge").value, "Young/older driver adjustment");
-      addBreakdownRow(breakdownBody, "Vehicle Year", document.getElementById("vehicleYear").value, "Vehicle age adjustment");
-      addBreakdownRow(breakdownBody, "Mileage", document.getElementById("annualMileage").value, "Mileage adjustment");
-      addBreakdownRow(breakdownBody, "Coverage Level", getSelectedRadioValue("autoCoverage"), "Coverage multiplier");
+        let premium = 0;
+        if (selectedType === "auto") {
+          premium = calculateAutoQuote();
+        } else if (selectedType === "home") {
+          premium = calculateHomeQuote();
+        } else if (selectedType === "life") {
+          premium = calculateLifeQuote();
+        }
+        showResults(selectedType, premium);
+      };
     }
-
-    if (type === "home") {
-      addBreakdownRow(breakdownBody, "Home Value", document.getElementById("homeValue").value, "Base premium based on home value");
-      addBreakdownRow(breakdownBody, "Year Built", document.getElementById("yearBuilt").value, "Age of home adjustment");
-      addBreakdownRow(breakdownBody, "Square Footage", document.getElementById("squareFootage").value, "Size adjustment");
-      addBreakdownRow(breakdownBody, "Coverage Level", getSelectedRadioValue("homeCoverage"), "Coverage multiplier");
-    }
-
-    if (type === "life") {
-      addBreakdownRow(breakdownBody, "Age", document.getElementById("lifeAge").value, "Age-based risk adjustment");
-      addBreakdownRow(breakdownBody, "Coverage Amount", document.getElementById("coverageAmount").value, "Policy size adjustment");
-      addBreakdownRow(breakdownBody, "Smoker", document.querySelector('input[name="smoker"]:checked').value, "Health risk adjustment");
-      addBreakdownRow(breakdownBody, "Exercise Frequency", document.getElementById("exerciseFrequency").value, "Lifestyle adjustment");
-    }
-
-    resultsSection.classList.remove("hidden");
-    secondQuote = quoteData;
   }
-
-  // Calculate quote button
-  calculateBtn.addEventListener("click", function () {
-    if (!validateForm()) return;
-
-    const type = getSelectedInsuranceType();
-    let premium = 0;
-
-    if (type === "auto") {
-      premium = calculateAutoQuote();
-    } else if (type === "home") {
-      premium = calculateHomeQuote();
-    } else if (type === "life") {
-      premium = calculateLifeQuote();
-    }
-
-    showResults(type, premium);
+  // Bind on load
+  bindCalculateBtn();
+  // Also re-bind after insurance type selection (in case button is re-rendered)
+  insuranceCards.forEach(card => {
+    card.addEventListener('click', bindCalculateBtn);
   });
 
   // Get another quote
-  anotherQuoteBtn.addEventListener("click", function () {
-    quoteForm.reset();
-    clearErrors();
-    hideAllFields();
-    resultsSection.classList.add("hidden");
-  });
-
-  // =========================================
-  // BONUS A: SIDE-BY-SIDE QUOTE COMPARISON
-  // =========================================
-  compareQuoteBtn.addEventListener("click", function () {
-    if (!secondQuote) {
-      alert("Please calculate a quote first.");
-      return;
-    }
-
-    if (!firstQuote) {
-      firstQuote = secondQuote;
-      alert("First quote saved. Now calculate a second quote to compare.");
+    anotherQuoteBtn.addEventListener("click", function () {
       quoteForm.reset();
       clearErrors();
       hideAllFields();
       resultsSection.classList.add("hidden");
-      return;
+      // Remove checkmark if present
+      const cardBody = resultsSection.querySelector('.card-body');
+      const check = cardBody ? cardBody.querySelector('.quote-success-check') : null;
+      if (check) check.style.display = 'none';
+      // Clear summary
+      const quoteSummary = document.getElementById("quoteSummary");
+      if (quoteSummary) quoteSummary.textContent = '';
+    });
+
+    // --- Saved Quotes Logic ---
+    const saveQuoteBtn = document.getElementById('saveQuoteBtn');
+    const savedQuotesList = document.getElementById('savedQuotesList');
+    let savedQuotes = [];
+
+    function renderSavedQuotes() {
+      if (!savedQuotesList) return;
+      if (savedQuotes.length === 0) {
+        savedQuotesList.innerHTML = '<span class="text-muted small">No saved quotes yet. Calculate a quote and click <b>Save Quote</b> to save it.</span>';
+        return;
+      }
+      savedQuotesList.innerHTML = '';
+      savedQuotes.forEach((q, idx) => {
+        const div = document.createElement('div');
+        div.className = 'saved-quote-item border rounded p-2 mb-2 d-flex flex-column flex-md-row align-items-md-center justify-content-between';
+        div.innerHTML = `
+          <div>
+            <span class="fw-semibold">${q.name}</span> &mdash; <span>${q.type}</span><br>
+            <span class="text-success">${formatCurrency(q.monthly)}/mo</span> <span class="text-muted">(${formatCurrency(q.annual)}/yr)</span>
+            <span class="text-muted small ms-2">${q.date} ${q.time}</span>
+          </div>
+          <div class="mt-2 mt-md-0">
+            <button class="btn btn-sm btn-outline-danger ms-2" data-idx="${idx}">Remove</button>
+          </div>
+        `;
+        // Remove handler
+        div.querySelector('button').addEventListener('click', function() {
+          savedQuotes.splice(idx, 1);
+          renderSavedQuotes();
+        });
+        savedQuotesList.appendChild(div);
+      });
     }
 
-    document.getElementById("quote1Name").textContent = firstQuote.name;
-    document.getElementById("quote1Type").textContent = firstQuote.type;
-    document.getElementById("quote1Monthly").textContent = formatCurrency(firstQuote.monthly);
-    document.getElementById("quote1Annual").textContent = formatCurrency(firstQuote.annual);
+    if (saveQuoteBtn) {
+      saveQuoteBtn.addEventListener('click', function () {
+        if (!window.latestQuote) return;
+        savedQuotes.push({...window.latestQuote});
+        renderSavedQuotes();
+        // Visual feedback
+        saveQuoteBtn.textContent = 'Saved!';
+        saveQuoteBtn.classList.remove('btn-success');
+        saveQuoteBtn.classList.add('btn-outline-success');
+        setTimeout(() => {
+          saveQuoteBtn.textContent = 'Save Quote';
+          saveQuoteBtn.classList.remove('btn-outline-success');
+          saveQuoteBtn.classList.add('btn-success');
+        }, 1200);
+      });
+    }
 
-    document.getElementById("quote2Name").textContent = secondQuote.name;
-    document.getElementById("quote2Type").textContent = secondQuote.type;
-    document.getElementById("quote2Monthly").textContent = formatCurrency(secondQuote.monthly);
-    document.getElementById("quote2Annual").textContent = formatCurrency(secondQuote.annual);
+    // Render on load in case of reload
+    renderSavedQuotes();
 
-    comparisonSection.classList.remove("hidden");
-  });
+  // =========================================
+  // BONUS A: SIDE-BY-SIDE QUOTE COMPARISON
+  // =========================================
 
-  resetComparisonBtn.addEventListener("click", function () {
-    firstQuote = null;
-    secondQuote = null;
-
-    comparisonSection.classList.add("hidden");
-    quoteForm.reset();
-    clearErrors();
-    hideAllFields();
-    resultsSection.classList.add("hidden");
-  });
+    // Add real-time validation on DOMContentLoaded
+    addRealtimeValidation();
+  // Removed compareQuoteBtn and resetComparisonBtn event listeners (not present in HTML)
 });
