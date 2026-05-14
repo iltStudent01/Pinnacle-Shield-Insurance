@@ -90,8 +90,8 @@
             </div>
           </div>
           <hr class="my-4" />
-          <!-- Step 2: Details Section -->
-          <div id="details-section" class="mb-4">
+          <!-- Step 2: Details Section (initially hidden) -->
+          <div id="details-section" class="mb-4 hidden">
             <!-- Step 2 Heading -->
             <h3 id="step2-heading" class="h6 mb-3">Step 2: Insurance Details</h3>
             <!-- Auto Fields -->
@@ -339,13 +339,13 @@
               </div>
             </div>
           </div>
-          <!-- Calculate Button -->
-          <div class="d-flex justify-content-center my-4">
+          <!-- Calculate Button (inside details-section) -->
+          <div id="calculate-section" class="d-flex justify-content-center my-4 hidden">
             <button type="button" id="calculateQuoteBtn" class="btn calculate-quote-btn px-5 py-3 fs-5 fw-bold">
               Calculate My Quote
             </button>
           </div>
-          <!-- Saved Quotes Section -->
+          <!-- Saved Quotes Section (below button, always visible) -->
           <div class="card shadow-sm mt-4 mb-0">
             <div class="card-body">
               <h2 class="h6 mb-3">Saved Quotes</h2>

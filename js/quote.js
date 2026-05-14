@@ -16,10 +16,14 @@ document.addEventListener("DOMContentLoaded", function () {
   let selectedType = null;
   const step2Heading = document.getElementById('step2-heading');
 
+  const detailsSection = document.getElementById('details-section');
+  const calculateSection = document.getElementById('calculate-section');
   function hideAllFields() {
     autoFields.classList.add("hidden");
     homeFields.classList.add("hidden");
     lifeFields.classList.add("hidden");
+    detailsSection.classList.add("hidden");
+    calculateSection.classList.add("hidden");
   }
 
   function updateStep2Heading(type) {
@@ -41,6 +45,8 @@ document.addEventListener("DOMContentLoaded", function () {
       selectedType = this.getAttribute('data-type');
       // Show relevant fields
       hideAllFields();
+      detailsSection.classList.remove("hidden");
+      calculateSection.classList.remove("hidden");
       updateStep2Heading(selectedType);
       if (selectedType === "auto") {
         autoFields.classList.remove("hidden");
@@ -57,6 +63,9 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
+
+  // On page load, hide details and calculate sections
+  hideAllFields();
 
   // --- Validation ---
   function showAlert(message) {
