@@ -1,3 +1,63 @@
+.footer-tagline {
+  display: block;
+  margin-top: 0.15rem;
+  margin-left: 0;
+  font-size: 0.98rem;
+  color: #b7d8c7;
+}
+/* Light green band for Key Statistics */
+.about-green-band {
+  background: linear-gradient(90deg,#e8f5e9 80%,#c8e6c9 100%);
+}
+/* =============================
+   ABOUT PAGE CUSTOM SECTIONS
+============================== */
+.stat-card {
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+.stat-card:hover {
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 8px 32px rgba(25, 118, 210, 0.13);
+}
+.about-blue-band {
+  background: linear-gradient(90deg,#1976d2 80%,#42a5f5 100%);
+}
+.about-blue-band .stat-card {
+  background: #fff;
+  border: none;
+}
+.about-blue-band h2 {
+  color: #fff;
+}
+@media (max-width: 991px) {
+  .about-blue-band .stat-card {
+    margin-bottom: 1.5rem;
+  }
+}
+@media (max-width: 767px) {
+  .about-blue-band .stat-card {
+    min-width: 140px;
+    padding: 1.2rem 0.5rem;
+  }
+}
+
+/* Footer dark theme */
+.site-footer {
+  background: #222c2a;
+  color: #e0e0e0;
+}
+.site-footer .footer-link {
+  color: #b7d8c7;
+  text-decoration: none;
+  transition: color 0.18s;
+}
+.site-footer .footer-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+.site-footer hr {
+  border-color: #3a4a47;
+}
 /* Field error styling for quote form */
 .is-invalid {
   border-color: #dc3545 !important;
