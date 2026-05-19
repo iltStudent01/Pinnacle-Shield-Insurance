@@ -1,5 +1,9 @@
 # Pinnacle Shield Insurance
 
+## Quick Links
+- Live Site: https://iltStudent01.github.io/Pinnacle-Shield-Insurance/
+- Repository: https://github.com/iltStudent01/Pinnacle-Shield-Insurance
+
 ## Overview
 Pinnacle Shield Insurance is a fictional insurance company website built as a responsive, modern static site. It demonstrates best practices in HTML, CSS (Bootstrap), and JavaScript for a professional business presence.
 
